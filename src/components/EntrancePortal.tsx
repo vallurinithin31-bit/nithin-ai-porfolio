@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import * as THREE from 'three';
 import { 
   BrainCircuit, 
   Sparkles, 
@@ -24,7 +25,157 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   const [activeStage, setActiveStage] = useState<'calibrating' | 'ready' | 'opening'>('calibrating');
   const [sparks, setSparks] = useState<{ id: number; x: number; y: number; size: number; color: string }[]>([]);
 
+  const threeCanvasRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const warpSpeedRef = useRef<number>(0.003);
+
+  // 3D Three.js WebGL Entrance Scene
+  useEffect(() => {
+    const container = threeCanvasRef.current;
+    if (!container) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 50;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // 1. 3D Rotating Geometric Wireframes
+    const torusKnotGeo = new THREE.TorusKnotGeometry(9, 2.2, 80, 16);
+    const torusKnotMat = new THREE.MeshBasicMaterial({
+      color: 0xc084fc,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35
+    });
+    const torusKnot = new THREE.Mesh(torusKnotGeo, torusKnotMat);
+    scene.add(torusKnot);
+
+    const icosaGeo = new THREE.IcosahedronGeometry(13, 1);
+    const icosaMat = new THREE.MeshBasicMaterial({
+      color: 0xfbbf24,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.20
+    });
+    const icosahedron = new THREE.Mesh(icosaGeo, icosaMat);
+    scene.add(icosahedron);
+
+    // 2. 3D Particle Starfield & Vortex
+    const starCount = 350;
+    const starGeometry = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    const starColors = new Float32Array(starCount * 3);
+
+    const colors = [
+      new THREE.Color('#c084fc'),
+      new THREE.Color('#a855f7'),
+      new THREE.Color('#fbbf24'),
+      new THREE.Color('#ffffff')
+    ];
+
+    for (let i = 0; i < starCount; i++) {
+      starPositions[i * 3] = (Math.random() - 0.5) * 120;
+      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 90;
+      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+
+      const col = colors[Math.floor(Math.random() * colors.length)];
+      starColors[i * 3] = col.r;
+      starColors[i * 3 + 1] = col.g;
+      starColors[i * 3 + 2] = col.b;
+    }
+
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
+    const starMaterial = new THREE.PointsMaterial({
+      size: 2.2,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
+    });
+
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+
+    // Mouse Parallax
+    let mouseX = 0;
+    let mouseY = 0;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    // Resize Handler
+    const handleResize = () => {
+      if (!container) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Animation Loop
+    let animationFrameId: number;
+    let clock = new THREE.Clock();
+
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+
+      // Camera parallax
+      camera.position.x += (mouseX * 8 - camera.position.x) * 0.05;
+      camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+      camera.lookAt(0, 0, 0);
+
+      // Rotate wireframe meshes
+      torusKnot.rotation.x = elapsed * 0.3;
+      torusKnot.rotation.y = elapsed * 0.4;
+      icosahedron.rotation.x = -elapsed * 0.2;
+      icosahedron.rotation.y = -elapsed * 0.25;
+
+      // Particle Vortex motion
+      const pos = starGeometry.attributes.position.array as Float32Array;
+      const speed = warpSpeedRef.current;
+
+      for (let i = 0; i < starCount; i++) {
+        pos[i * 3 + 2] += speed * 60;
+        if (pos[i * 3 + 2] > 40) {
+          pos[i * 3 + 2] = -40;
+          pos[i * 3] = (Math.random() - 0.5) * 120;
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 90;
+        }
+      }
+      starGeometry.attributes.position.needsUpdate = true;
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
+
+      torusKnotGeo.dispose();
+      torusKnotMat.dispose();
+      icosaGeo.dispose();
+      icosaMat.dispose();
+      starGeometry.dispose();
+      starMaterial.dispose();
+
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+    };
+  }, []);
 
   // Play synthetic futuristic sound effects with Web Audio API
   const playSciFiSound = (type: 'beep' | 'unlock' | 'laser') => {
@@ -72,7 +223,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         osc.stop(now + 0.5);
       }
     } catch {
-      // Audio context fallback
+      // Audio fallback
     }
   };
 
@@ -80,12 +231,12 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   const triggerCelebrationSparks = () => {
     const newSparks = [];
     const colors = ['#c084fc', '#a855f7', '#fbbf24', '#ffffff', '#e879f9', '#60a5fa'];
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 45; i++) {
       newSparks.push({
         id: i,
-        x: (Math.random() - 0.5) * 800,
-        y: (Math.random() - 0.5) * 600,
-        size: Math.random() * 8 + 4,
+        x: (Math.random() - 0.5) * 850,
+        y: (Math.random() - 0.5) * 650,
+        size: Math.random() * 9 + 4,
         color: colors[Math.floor(Math.random() * colors.length)]
       });
     }
@@ -115,6 +266,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     setIsOpening(true);
     setActiveStage('opening');
     setHasStartedCelebration(true);
+    warpSpeedRef.current = 0.08; // Accelerate 3D starfield hyperdrive!
     triggerCelebrationSparks();
     playSciFiSound('unlock');
 
@@ -132,10 +284,19 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     <div className="fixed inset-0 z-50 overflow-hidden select-none bg-black flex items-center justify-center">
       
       {/* =========================================================================
+          3D THREE.JS WEBGL SINGULARITY & VORTEX CANVAS (Background)
+      ========================================================================= */}
+      <div 
+        ref={threeCanvasRef}
+        className="absolute inset-0 pointer-events-none z-20 overflow-hidden opacity-80"
+        aria-hidden="true"
+      />
+
+      {/* =========================================================================
           LEFT VAULT SLIDING DOOR
       ========================================================================= */}
       <div 
-        className={`absolute inset-y-0 left-0 w-1/2 bg-[#09090e] z-30 transition-transform duration-1000 ease-in-out flex items-center justify-start overflow-hidden ${
+        className={`absolute inset-y-0 left-0 w-1/2 bg-[#09090e]/95 z-30 transition-transform duration-1000 ease-in-out flex items-center justify-start overflow-hidden backdrop-blur-sm ${
           isOpening ? '-translate-x-full shadow-[20px_0_50px_rgba(168,85,247,0.8)]' : 'translate-x-0'
         }`}
       >
@@ -145,10 +306,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         {/* Left Decorative Hydraulic Marks */}
         <div className="absolute left-6 sm:left-12 top-10 font-mono text-[10px] text-lilac-400/40 space-y-1 tracking-widest uppercase">
           <div>// GATE: SECTOR_01_AI</div>
-          <div>// PROTOCOL: GRAND_OPENING</div>
+          <div>// 3D_NEURAL_ENGINE: ACTIVE</div>
         </div>
 
-        {/* Beautifully Inset & Centered AI Monogram */}
+        {/* Inset & Centered AI Monogram */}
         <div className="text-6xl sm:text-8xl md:text-9xl font-cinzel font-black text-lilac-500/[0.07] ml-8 sm:ml-16 select-none pointer-events-none tracking-widest">
           AI
         </div>
@@ -158,7 +319,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
           RIGHT VAULT SLIDING DOOR
       ========================================================================= */}
       <div 
-        className={`absolute inset-y-0 right-0 w-1/2 bg-[#09090e] z-30 transition-transform duration-1000 ease-in-out flex items-center justify-end overflow-hidden ${
+        className={`absolute inset-y-0 right-0 w-1/2 bg-[#09090e]/95 z-30 transition-transform duration-1000 ease-in-out flex items-center justify-end overflow-hidden backdrop-blur-sm ${
           isOpening ? 'translate-x-full shadow-[-20px_0_50px_rgba(168,85,247,0.8)]' : 'translate-x-0'
         }`}
       >
@@ -167,11 +328,11 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         
         {/* Right Decorative Status */}
         <div className="absolute right-6 sm:right-12 top-10 font-mono text-[10px] text-lilac-400/40 space-y-1 tracking-widest text-right uppercase">
-          <div>CORE: ACTIVE //</div>
+          <div>WEBGL_3D: ENABLED //</div>
           <div>EST. 2026 //</div>
         </div>
 
-        {/* Beautifully Inset & Centered ML Monogram */}
+        {/* Inset & Centered ML Monogram */}
         <div className="text-6xl sm:text-8xl md:text-9xl font-cinzel font-black text-lilac-500/[0.07] mr-8 sm:mr-16 select-none pointer-events-none tracking-widest">
           ML
         </div>
@@ -192,7 +353,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         {/* Top Floating VIP Invitation Badge */}
         <div className="inline-flex items-center gap-2.5 px-5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-lilac-500/20 to-purple-500/15 border border-amber-400/40 text-amber-300 text-xs font-mono tracking-[0.25em] uppercase mb-6 shadow-[0_0_20px_rgba(251,191,36,0.3)] animate-pulse">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>OFFICIAL DIGITAL LAUNCH • GRAND ENTRANCE</span>
+          <span>OFFICIAL DIGITAL LAUNCH • 3D IMMERSIVE GATE</span>
         </div>
 
         {/* Centerpiece: Multi-tier 3D Holographic Gyroscope AI Singularity */}
@@ -226,7 +387,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
             </div>
           </div>
 
-          {/* Floating Key Metric Pills with Comfortable Inset */}
+          {/* Floating Key Metric Pills */}
           <div className="absolute -left-10 sm:-left-16 top-4 px-3 py-1 rounded-xl bg-obsidian-surface/90 border border-lilac-500/30 text-[10px] font-mono text-lilac-300 shadow-xl hidden sm:flex items-center gap-1.5 animate-float" style={{ animationDelay: '0.5s' }}>
             <Radio className="w-3 h-3 text-amber-400 animate-ping" />
             <span>AIML 2024-2028</span>
@@ -250,7 +411,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
 
         {/* Small Intro Line */}
         <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-lilac-300/80 uppercase mb-1">
-          WELCOME TO THE DIGITAL SPACE OF
+          WELCOME TO THE 3D DIGITAL REALM OF
         </p>
 
         {/* Monumental Highlighted Name Typography */}
@@ -269,10 +430,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
             <span className="flex items-center gap-1.5 text-lilac-300">
               <Terminal className="w-3.5 h-3.5" />
               {activeStage === 'opening' 
-                ? 'INITIALIZING GRAND OPENING SEQUENCE...' 
+                ? 'INITIALIZING 3D WARP SEQUENCE...' 
                 : activeStage === 'ready' 
-                ? 'ACCESS GRANTED • READY FOR LAUNCH' 
-                : 'SYNCHRONIZING NEURAL WEIGHTS...'}
+                ? '3D ENGINES READY • ACCESS GRANTED' 
+                : 'SYNCHRONIZING 3D NEURAL NODES...'}
             </span>
             <span className="font-bold text-amber-400">{progress}%</span>
           </div>
@@ -305,7 +466,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
               <Lock className="w-5 h-5" />
             )}
             
-            <span>{activeStage === 'opening' ? 'OPENING GATES...' : 'UNLOCK & ENTER PORTFOLIO'}</span>
+            <span>{activeStage === 'opening' ? '3D WARP OPENING...' : 'UNLOCK & ENTER 3D PORTFOLIO'}</span>
           </button>
         </div>
 

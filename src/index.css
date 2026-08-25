@@ -55,6 +55,8 @@
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(168, 85, 247, 0.16);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .light .glass-panel {
@@ -79,10 +81,15 @@
   border-bottom: 1px solid rgba(168, 85, 247, 0.15);
 }
 
-/* Glowing card effect with Royal Violet border mask */
+/* Glowing card effect with Royal Violet border mask & 3D hover physics */
 .ai-glow-card {
   position: relative;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.ai-glow-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 20px 40px -15px rgba(168, 85, 247, 0.35);
 }
 
 .ai-glow-card::before {

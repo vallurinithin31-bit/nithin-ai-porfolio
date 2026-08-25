@@ -4,7 +4,11 @@ import {
   Download, 
   Mail, 
   BrainCircuit,
-  Sparkles
+  Sparkles,
+  Terminal,
+  Cpu,
+  Bot,
+  GraduationCap
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon } from './Icons';
@@ -18,6 +22,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
   const handleDownloadResume = () => {
     onToast("Opening Executive Digital Resume viewer...", "info");
   };
+
+  const professionPills = [
+    { label: 'B.Tech in AI & ML (2024-2028)', icon: GraduationCap },
+    { label: 'Python & ML Specialist', icon: Cpu },
+    { label: 'Agentic AI & RAG Architectures', icon: Bot },
+    { label: 'Predictive Data Analytics', icon: Sparkles }
+  ];
 
   return (
     <section id="home" className="relative min-h-screen flex flex-col justify-between pt-28 pb-12 overflow-hidden select-none">
@@ -56,48 +67,88 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
         </div>
 
         {/* Main Composition */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
           
-          {/* Left / Center-Left: Prominent Animated Name & Editorial Headline */}
+          {/* Left / Center-Left: Prominent Title, Profession Bullets & Animated Bio Box */}
           <div className="lg:col-span-7 flex flex-col items-start text-left z-20">
             
-            <div className="relative mb-6 select-none w-full">
-              
-              {/* Highlighted Full Name with Shimmer Glow Animation */}
-              <div className="mb-2">
-                <span className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase text-lilac-400 font-semibold block mb-1">
-                  AI &amp; MACHINE LEARNING
-                </span>
-                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-cinzel font-black tracking-wider uppercase leading-none animated-name-highlight drop-shadow-[0_0_30px_rgba(192,132,252,0.6)]">
-                  {personalInfo.name}
-                </h1>
-              </div>
-
-              {/* Specialization & Role Headline */}
-              <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-cinzel font-black tracking-tight leading-[1.05] text-transparent bg-clip-text bg-gradient-to-r from-lilac-300 via-lilac-400 to-purple-500 mt-2">
-                AI &amp; MACHINE LEARNING<br />
-                <span className="text-white font-cinzel tracking-normal">ENGINEER</span>
-              </div>
-
-              {/* Sub-tagline */}
-              <p className="font-mono text-xs sm:text-sm text-lilac-300/90 tracking-wider mt-3">
-                B.Tech (AI &amp; ML) • Python Developer • Autonomous Agent Builder
-              </p>
+            {/* 1. Grand Name Title */}
+            <div className="relative mb-2 select-none w-full">
+              <span className="text-[11px] sm:text-xs font-mono tracking-[0.35em] uppercase text-lilac-400 font-bold block mb-1.5">
+                ✦ OFFICIAL PORTFOLIO OF
+              </span>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-cinzel font-black tracking-wider uppercase leading-tight animated-name-highlight drop-shadow-[0_0_25px_rgba(192,132,252,0.7)]">
+                {personalInfo.name}
+              </h1>
             </div>
 
-            {/* Left Sub-description & Tag */}
-            <div className="space-y-4 max-w-xl">
-              <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-normal">
+            {/* 2. Specialization Subtitle */}
+            <div className="mb-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-cinzel font-black tracking-tight text-white leading-tight">
+                AI &amp; MACHINE LEARNING <span className="text-transparent bg-clip-text bg-gradient-to-r from-lilac-300 via-lilac-400 to-purple-500">ENGINEER</span>
+              </h2>
+            </div>
+
+            {/* 3. Profession Highlighted with Bullet Point Pills */}
+            <div className="flex flex-wrap items-center gap-2.5 mb-6">
+              {professionPills.map((pill, idx) => {
+                const Icon = pill.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-obsidian-surface/90 border border-lilac-500/25 text-lilac-200 text-xs font-mono shadow-md hover:border-lilac-400/80 hover:bg-lilac-950/40 hover:scale-105 transition-all duration-200 group"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-lilac-400 shadow-[0_0_8px_#c084fc] animate-pulse" />
+                    <Icon className="w-3.5 h-3.5 text-lilac-300 group-hover:text-white transition-colors" />
+                    <span className="font-semibold tracking-wide">{pill.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 4. Animated Glassmorphic Bio Box ("Box Appeal in Animated Way") */}
+            <div className="relative w-full max-w-2xl rounded-3xl p-6 sm:p-7 glass-panel border border-lilac-500/30 ai-glow-card overflow-hidden group shadow-2xl mb-6">
+              
+              {/* Inner subtle tech grid & ambient glow */}
+              <div className="absolute inset-0 tech-grid opacity-20 pointer-events-none" />
+              <div className="absolute -right-10 -bottom-10 w-36 h-36 bg-lilac-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
+              <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-lilac-400 via-purple-600 to-indigo-600 rounded-l-3xl" />
+
+              {/* Bio Box Header */}
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-lilac-500/15">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-lilac-500/15 text-lilac-300 border border-lilac-500/30">
+                    <Terminal className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-[11px] font-mono font-bold tracking-widest text-lilac-200 uppercase">
+                    EXECUTIVE SUMMARY &amp; BIO
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Active Engineer</span>
+                </div>
+              </div>
+
+              {/* Bio Text */}
+              <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed font-normal">
                 {personalInfo.intro}
               </p>
 
-              {/* Monospace Tag Box: </ DATA. ALGORITHMS. AGENTS. DEPLOY /> */}
-              <div className="inline-block px-3.5 py-1.5 rounded-xl bg-lilac-950/40 border border-lilac-500/20 text-lilac-300 font-mono text-xs tracking-widest">
-                &lt;/ DATA. ALGORITHMS. AGENTS. DEPLOY /&gt;
+              {/* Monospace Tech Tag Bar inside Box */}
+              <div className="mt-4 pt-3 border-t border-lilac-500/15 flex items-center justify-between">
+                <span className="text-[11px] font-mono text-lilac-300 font-semibold tracking-widest">
+                  &lt;/ DATA. ALGORITHMS. AGENTS. DEPLOY /&gt;
+                </span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                  Python • ML • RAG
+                </span>
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 pt-2">
+            {/* 5. Action Buttons & Social Links */}
+            <div className="space-y-4 w-full">
+              <div className="flex flex-wrap gap-3">
                 <a
                   href="#projects"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 hover:from-lilac-400 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider shadow-xl shadow-purple-950/60 hover:scale-105 transition-all duration-200"
@@ -127,7 +178,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
               </div>
 
               {/* Social Profiles Strip */}
-              <div className="flex items-center gap-3 pt-4 border-t border-lilac-500/15">
+              <div className="flex items-center gap-3 pt-3 border-t border-lilac-500/15">
                 <span className="text-xs font-mono text-zinc-500 uppercase">Profiles:</span>
                 <a
                   href={personalInfo.socials.linkedin}
@@ -171,7 +222,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
               {/* Inner subtle tech grid */}
               <div className="absolute inset-0 tech-grid opacity-30 pointer-events-none" />
 
-              {/* Status Header without "AVAILABLE" word */}
+              {/* Status Header */}
               <div className="w-full flex items-center justify-center z-10">
                 <span className="px-4 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-lilac-500/15 text-lilac-300 border border-lilac-500/30 font-bold">
                   AI &amp; ML CORE
@@ -239,7 +290,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
 
         </div>
 
-        {/* 4-Column Statistics Strip (Directly from Uploaded Poster) */}
+        {/* 4-Column Statistics Strip */}
         <div className="mt-14 pt-8 border-t border-lilac-500/20 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           
           <div className="p-4 rounded-2xl bg-obsidian-surface/60 border border-lilac-500/15">
