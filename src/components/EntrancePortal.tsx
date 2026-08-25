@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { 
-  Sparkles, 
   Volume2, 
   VolumeX, 
   ArrowRight,
   BrainCircuit,
-  Loader2
+  Loader2,
+  Zap,
+  HandMetal
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
@@ -16,13 +17,14 @@ interface EntrancePortalProps {
 
 export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   const [progress, setProgress] = useState(0);
-  const [isEntering, setIsEntering] = useState(false);
+  const [isOpeningAnimation, setIsOpeningAnimation] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   const threeCanvasRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const warpSpeedRef = useRef<number>(0.004);
 
-  // 3D Ambient WebGL Background Scene
+  // 3D Three.js Ambient Welcoming WebGL Canvas
   useEffect(() => {
     const container = threeCanvasRef.current;
     if (!container) return;
@@ -36,19 +38,19 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // 1. Central 3D AI & ML Torus Knot Wireframe
-    const torusGeo = new THREE.TorusKnotGeometry(10, 2.5, 90, 16);
+    // 1. Central 3D Welcoming Gyroscope Torus Knot
+    const torusGeo = new THREE.TorusKnotGeometry(10, 2.4, 90, 16);
     const torusMat = new THREE.MeshBasicMaterial({
       color: 0xc084fc,
       wireframe: true,
       transparent: true,
-      opacity: 0.28
+      opacity: 0.32
     });
     const torusKnot = new THREE.Mesh(torusGeo, torusMat);
     scene.add(torusKnot);
 
-    // 2. 3D Particle Starfield
-    const starCount = 200;
+    // 2. 3D Particle Starfield & Warp Vortex
+    const starCount = 300;
     const starGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(starCount * 3);
     const colors = new Float32Array(starCount * 3);
@@ -56,14 +58,15 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     const colorPalette = [
       new THREE.Color('#c084fc'),
       new THREE.Color('#a855f7'),
-      new THREE.Color('#e9d5ff'),
-      new THREE.Color('#ffffff')
+      new THREE.Color('#fbbf24'),
+      new THREE.Color('#ffffff'),
+      new THREE.Color('#e879f9')
     ];
 
     for (let i = 0; i < starCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 110;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
+      positions[i * 3] = (Math.random() - 0.5) * 120;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 90;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 70;
 
       const col = colorPalette[Math.floor(Math.random() * colorPalette.length)];
       colors[i * 3] = col.r;
@@ -75,10 +78,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     starGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const starMat = new THREE.PointsMaterial({
-      size: 2.0,
+      size: 2.4,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.85,
       blending: THREE.AdditiveBlending
     });
 
@@ -111,17 +114,28 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
       animationFrameId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
-      // Camera smooth lerp
-      camera.position.x += (mouseX * 6 - camera.position.x) * 0.05;
-      camera.position.y += (mouseY * 4 - camera.position.y) * 0.05;
+      // Camera smooth parallax
+      camera.position.x += (mouseX * 7 - camera.position.x) * 0.05;
+      camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
       camera.lookAt(0, 0, 0);
 
       // Rotate central 3D wireframe
-      torusKnot.rotation.x = elapsed * 0.25;
-      torusKnot.rotation.y = elapsed * 0.35;
+      torusKnot.rotation.x = elapsed * 0.28;
+      torusKnot.rotation.y = elapsed * 0.38;
 
-      // Rotate starfield
-      stars.rotation.y = elapsed * 0.05;
+      // Particle Vortex motion
+      const pos = starGeo.attributes.position.array as Float32Array;
+      const speed = warpSpeedRef.current;
+
+      for (let i = 0; i < starCount; i++) {
+        pos[i * 3 + 2] += speed * 60;
+        if (pos[i * 3 + 2] > 35) {
+          pos[i * 3 + 2] = -35;
+          pos[i * 3] = (Math.random() - 0.5) * 120;
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 90;
+        }
+      }
+      starGeo.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     };
@@ -146,7 +160,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   }, []);
 
   // Web Audio API Sound Synthesizer
-  const playUnlockSound = () => {
+  const playOpenSound = () => {
     if (!soundEnabled) return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -159,21 +173,24 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
       }
 
       const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      // Chord chime
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(440, now);
-      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.35);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + i * 0.08 + 0.4);
 
-      gain.gain.setValueAtTime(0.15, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+        gain.gain.setValueAtTime(0.08, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.6);
 
-      osc.start(now);
-      osc.stop(now + 0.55);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.6);
+      });
     } catch {
       // Audio fallback
     }
@@ -187,7 +204,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
           clearInterval(interval);
           return 100;
         }
-        const next = prev + Math.floor(Math.random() * 14) + 8;
+        const next = prev + Math.floor(Math.random() * 12) + 7;
         return Math.min(next, 100);
       });
     }, 60);
@@ -195,40 +212,50 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleEnterClick = () => {
-    if (progress < 100 || isEntering) return;
-    setIsEntering(true);
-    playUnlockSound();
+  const handleOpenPortfolio = () => {
+    if (progress < 100 || isOpeningAnimation) return;
+    
+    // Trigger opening animation sequence
+    setIsOpeningAnimation(true);
+    warpSpeedRef.current = 0.09; // Accelerate 3D vortex into hyperdrive warp!
+    playOpenSound();
 
     setTimeout(() => {
       onEnter();
-    }, 650);
+    }, 850);
   };
 
   const isReady = progress >= 100;
 
   return (
     <div 
-      className={`fixed inset-0 z-50 overflow-hidden select-none bg-[#09090e] flex flex-col items-center justify-between p-6 sm:p-10 transition-all duration-700 ${
-        isEntering ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100 scale-100'
+      className={`fixed inset-0 z-50 overflow-hidden select-none bg-[#09090e] flex flex-col items-center justify-between p-6 sm:p-10 transition-all duration-850 ease-out ${
+        isOpeningAnimation 
+          ? 'opacity-0 scale-150 rotate-1 filter blur-sm pointer-events-none' 
+          : 'opacity-100 scale-100 rotate-0 filter-none'
       }`}
     >
       {/* 3D WebGL Canvas Layer */}
       <div 
         ref={threeCanvasRef}
-        className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-75"
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-80"
         aria-hidden="true"
       />
 
-      {/* Ambient Radial Lighting */}
-      <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-0 opacity-60" />
-      <div className="absolute w-[40rem] h-[40rem] rounded-full bg-purple-600/15 blur-[120px] pointer-events-none z-0" />
+      {/* Ambient Lighting */}
+      <div className="absolute w-[44rem] h-[44rem] rounded-full bg-purple-600/20 blur-[130px] pointer-events-none z-0 animate-pulse-slow" />
+      <div className="absolute inset-0 tech-grid opacity-20 pointer-events-none z-0" />
 
-      {/* Top Bar */}
+      {/* Opening Light Burst Overlay (Flashes when clicking enter) */}
+      <div className={`absolute inset-0 bg-gradient-to-tr from-purple-800 via-lilac-500 to-amber-300 pointer-events-none z-20 transition-opacity duration-700 ${
+        isOpeningAnimation ? 'opacity-90' : 'opacity-0'
+      }`} />
+
+      {/* Top Welcoming Header Bar */}
       <div className="relative z-10 w-full max-w-4xl flex items-center justify-between pt-2">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lilac-500/10 border border-lilac-500/25 text-lilac-300 text-xs font-mono tracking-widest uppercase backdrop-blur-md">
-          <Sparkles className="w-3.5 h-3.5 text-lilac-400" />
-          <span>AI &amp; MACHINE LEARNING</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-mono tracking-widest uppercase backdrop-blur-md shadow-[0_0_15px_rgba(251,191,36,0.25)] animate-pulse">
+          <HandMetal className="w-3.5 h-3.5 text-amber-400" />
+          <span>WELCOME, ESTEEMED VISITOR &amp; GUEST</span>
         </div>
 
         <button
@@ -241,80 +268,90 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         </button>
       </div>
 
-      {/* Center Hero Card & Action Button */}
-      <div className="relative z-10 max-w-2xl w-full text-center flex flex-col items-center my-auto py-8">
+      {/* Center Welcoming Content Card & Center Button */}
+      <div className="relative z-10 max-w-2xl w-full text-center flex flex-col items-center my-auto py-6">
         
-        {/* Glowing Brain Hologram Icon */}
-        <div className="relative mb-6 flex items-center justify-center">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-purple-700 via-lilac-500 to-indigo-600 p-[1.5px] shadow-[0_0_45px_rgba(192,132,252,0.6)] animate-float">
+        {/* Holographic Glowing Brain Core Icon */}
+        <div className="relative mb-5 flex items-center justify-center">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-purple-700 via-lilac-500 to-amber-400 p-[1.5px] shadow-[0_0_50px_rgba(192,132,252,0.7)] animate-float">
             <div className="w-full h-full rounded-3xl bg-[#09090e] flex items-center justify-center border border-lilac-300/30">
-              <BrainCircuit className="w-10 h-10 sm:w-12 sm:h-12 text-lilac-200 animate-pulse drop-shadow-[0_0_15px_rgba(192,132,252,0.8)]" />
+              <BrainCircuit className="w-10 h-10 sm:w-12 sm:h-12 text-lilac-200 animate-pulse drop-shadow-[0_0_15px_rgba(192,132,252,0.9)]" />
             </div>
           </div>
         </div>
 
-        {/* Name Title */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-black tracking-wider uppercase leading-tight mb-2 animated-name-highlight drop-shadow-[0_0_35px_rgba(192,132,252,0.7)]">
+        {/* Welcoming Subtitle Banner */}
+        <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-lilac-300 uppercase mb-1">
+          ✦ WELCOME TO THE DIGITAL WORLD OF ✦
+        </p>
+
+        {/* Main Title Name */}
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-black tracking-wider uppercase leading-tight mb-2 animated-name-highlight drop-shadow-[0_0_35px_rgba(192,132,252,0.8)]">
           {personalInfo.name}
         </h1>
 
-        {/* AI & ML Role */}
-        <h2 className="text-lg sm:text-2xl font-cinzel font-bold text-white tracking-widest uppercase mb-2">
-          ARTIFICIAL INTELLIGENCE &amp; MACHINE LEARNING
+        {/* Profession Highlight */}
+        <h2 className="text-base sm:text-xl font-cinzel font-bold text-amber-300 tracking-widest uppercase mb-3">
+          ARTIFICIAL INTELLIGENCE &amp; MACHINE LEARNING ENGINEER
         </h2>
 
-        <p className="text-xs sm:text-sm font-mono text-lilac-300/80 mb-10">
-          Amrita Sai Institute of Science &amp; Technology • Python Developer
+        {/* Warm Personal Welcoming Statement */}
+        <p className="text-xs sm:text-sm text-zinc-300 max-w-lg leading-relaxed font-normal mb-8">
+          Welcome! I am delighted to invite you to explore my intelligent AI architectures, autonomous agents, predictive analytics models, and verified certifications.
         </p>
 
-        {/* Center Loading Bar & Enter Button */}
+        {/* =========================================================================
+            ONLY CENTER BUTTON WITH INTEGRATED LOADING BAR
+        ========================================================================= */}
         <div className="w-full max-w-md flex flex-col items-center">
           
           {!isReady ? (
             /* Loading State Pill */
-            <div className="w-full rounded-2xl bg-obsidian-surface/90 border border-lilac-500/30 p-4 shadow-xl backdrop-blur-md">
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
+            <div className="w-full rounded-2xl bg-obsidian-surface/95 border border-lilac-500/35 p-4 shadow-2xl backdrop-blur-md">
+              <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2.5">
                 <span className="flex items-center gap-2 text-lilac-300">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-lilac-400" />
-                  INITIALIZING AI &amp; ML CORE...
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                  PREPARING 3D PORTFOLIO EXPERIENCE...
                 </span>
-                <span className="font-bold text-lilac-300">{progress}%</span>
+                <span className="font-bold text-amber-400">{progress}%</span>
               </div>
 
               {/* Progress Bar Fill */}
-              <div className="w-full h-2 rounded-full bg-black/60 border border-lilac-500/20 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-black border border-lilac-500/20 overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-purple-600 via-lilac-500 to-indigo-500 transition-all duration-150 shadow-[0_0_12px_rgba(192,132,252,0.8)]"
+                  className="h-full bg-gradient-to-r from-purple-600 via-lilac-500 to-amber-400 transition-all duration-150 shadow-[0_0_15px_rgba(251,191,36,0.8)]"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
           ) : (
-            /* Ready Enter Button */
+            /* Interactive Ready Enter Button */
             <div className="relative group w-full sm:w-auto">
+              
               {/* Glowing Aura Ring */}
-              <div className="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 opacity-75 blur-md group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-amber-400 via-lilac-500 to-purple-600 opacity-80 blur-lg group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
 
               <button
-                onClick={handleEnterClick}
-                className="relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 sm:px-14 py-4 sm:py-4.5 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 hover:from-lilac-400 hover:to-indigo-500 text-white font-cinzel font-black text-sm sm:text-base uppercase tracking-widest shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
+                onClick={handleOpenPortfolio}
+                className="relative w-full sm:w-auto inline-flex items-center justify-center gap-3.5 px-10 sm:px-14 py-4 sm:py-5 rounded-2xl bg-gradient-to-r from-amber-400 via-lilac-400 to-purple-600 hover:from-amber-300 hover:to-purple-500 text-black font-cinzel font-black text-sm sm:text-base uppercase tracking-widest shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-white/40"
               >
-                <span>ENTER AI &amp; ML PORTFOLIO</span>
-                <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+                <Zap className="w-5 h-5 text-black animate-bounce" />
+                <span>ENTER &amp; EXPLORE PORTFOLIO</span>
+                <ArrowRight className="w-5 h-5 text-black group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           )}
 
-          {/* Skip option */}
+          {/* Quick direct skip */}
           <button
             onClick={() => {
-              playUnlockSound();
-              setIsEntering(true);
+              playOpenSound();
+              setIsOpeningAnimation(true);
               setTimeout(() => onEnter(), 400);
             }}
             className="text-[11px] font-mono text-zinc-500 hover:text-lilac-300 transition-colors mt-6 tracking-wider uppercase"
           >
-            Skip to Portfolio &gt;&gt;
+            Skip directly into slides &gt;&gt;
           </button>
         </div>
 
@@ -322,7 +359,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
 
       {/* Bottom Sub-tag */}
       <div className="relative z-10 text-[11px] font-mono text-zinc-500 text-center pb-2">
-        © 2026 {personalInfo.name} • Built with React, Three.js &amp; Tailwind CSS
+        Amrita Sai Institute of Science &amp; Technology • Python Developer • 2024-2028
       </div>
 
     </div>

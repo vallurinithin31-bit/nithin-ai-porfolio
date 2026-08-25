@@ -3,6 +3,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { BackgroundGlow } from './components/BackgroundGlow';
 import { EntrancePortal } from './components/EntrancePortal';
 import { Section3DWrapper } from './components/Section3DWrapper';
+import { SlideNavigator } from './components/SlideNavigator';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { WhatIDo } from './components/WhatIDo';
@@ -31,7 +32,7 @@ export const App: React.FC = () => {
     <ThemeProvider>
       <div className="min-h-screen relative selection:bg-lilac-500/30 selection:text-lilac-200 overflow-x-hidden">
         
-        {/* Clean, Elegant AI & ML Entrance Page */}
+        {/* Welcoming AI & ML Entrance Gate with Hyperdrive Opening Animation */}
         {!hasEntered && (
           <EntrancePortal onEnter={() => setHasEntered(true)} />
         )}
@@ -42,8 +43,11 @@ export const App: React.FC = () => {
         {/* Sticky Accessible Navigation Bar */}
         <Navbar />
 
-        {/* Main Content Sections with 3D Slide Animation on Scroll */}
-        <main className="relative z-10 space-y-12 sm:space-y-16">
+        {/* Floating 3D Slide Navigator */}
+        <SlideNavigator />
+
+        {/* Main Content Sections with Dynamic 3D Movable Slide Scroll System */}
+        <main className="relative z-10 space-y-16 sm:space-y-24 py-8">
           <Section3DWrapper id="home">
             <Hero
               onOpenResumeModal={() => setIsResumeModalOpen(true)}
