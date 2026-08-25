@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { BackgroundGlow } from './components/BackgroundGlow';
+import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { EntrancePortal } from './components/EntrancePortal';
 import { Section3DWrapper } from './components/Section3DWrapper';
 import { SlideNavigator } from './components/SlideNavigator';
@@ -32,6 +33,9 @@ export const App: React.FC = () => {
     <ThemeProvider>
       <div className="min-h-screen relative selection:bg-lilac-500/30 selection:text-lilac-200 overflow-x-hidden">
         
+        {/* Top Laser Scroll Progress Indicator */}
+        <ScrollProgressBar />
+
         {/* Welcoming AI & ML Entrance Gate with Hyperdrive Opening Animation */}
         {!hasEntered && (
           <EntrancePortal onEnter={() => setHasEntered(true)} />
@@ -46,8 +50,8 @@ export const App: React.FC = () => {
         {/* Floating 3D Slide Navigator */}
         <SlideNavigator />
 
-        {/* Main Content Sections with Dynamic 3D Movable Slide Scroll System */}
-        <main className="relative z-10 space-y-16 sm:space-y-24 py-8">
+        {/* Main Content Sections with Ultra-Smooth 3D Scroll Reveal Animation */}
+        <main className="relative z-10 space-y-12 sm:space-y-16">
           <Section3DWrapper id="home">
             <Hero
               onOpenResumeModal={() => setIsResumeModalOpen(true)}
