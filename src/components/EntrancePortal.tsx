@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { 
-  BrainCircuit, 
   Sparkles, 
-  Terminal, 
   Volume2, 
   VolumeX, 
-  Lock, 
-  Unlock,
-  Radio,
-  Fingerprint
+  ArrowRight,
+  BrainCircuit,
+  Loader2
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
@@ -19,87 +16,73 @@ interface EntrancePortalProps {
 
 export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   const [progress, setProgress] = useState(0);
-  const [isOpening, setIsOpening] = useState(false);
-  const [hasStartedCelebration, setHasStartedCelebration] = useState(false);
+  const [isEntering, setIsEntering] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [activeStage, setActiveStage] = useState<'calibrating' | 'ready' | 'opening'>('calibrating');
-  const [sparks, setSparks] = useState<{ id: number; x: number; y: number; size: number; color: string }[]>([]);
 
   const threeCanvasRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
-  const warpSpeedRef = useRef<number>(0.003);
 
-  // 3D Three.js WebGL Entrance Scene
+  // 3D Ambient WebGL Background Scene
   useEffect(() => {
     const container = threeCanvasRef.current;
     if (!container) return;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 50;
+    camera.position.z = 45;
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // 1. 3D Rotating Geometric Wireframes
-    const torusKnotGeo = new THREE.TorusKnotGeometry(9, 2.2, 80, 16);
-    const torusKnotMat = new THREE.MeshBasicMaterial({
+    // 1. Central 3D AI & ML Torus Knot Wireframe
+    const torusGeo = new THREE.TorusKnotGeometry(10, 2.5, 90, 16);
+    const torusMat = new THREE.MeshBasicMaterial({
       color: 0xc084fc,
       wireframe: true,
       transparent: true,
-      opacity: 0.35
+      opacity: 0.28
     });
-    const torusKnot = new THREE.Mesh(torusKnotGeo, torusKnotMat);
+    const torusKnot = new THREE.Mesh(torusGeo, torusMat);
     scene.add(torusKnot);
 
-    const icosaGeo = new THREE.IcosahedronGeometry(13, 1);
-    const icosaMat = new THREE.MeshBasicMaterial({
-      color: 0xfbbf24,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.20
-    });
-    const icosahedron = new THREE.Mesh(icosaGeo, icosaMat);
-    scene.add(icosahedron);
+    // 2. 3D Particle Starfield
+    const starCount = 200;
+    const starGeo = new THREE.BufferGeometry();
+    const positions = new Float32Array(starCount * 3);
+    const colors = new Float32Array(starCount * 3);
 
-    // 2. 3D Particle Starfield & Vortex
-    const starCount = 350;
-    const starGeometry = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(starCount * 3);
-    const starColors = new Float32Array(starCount * 3);
-
-    const colors = [
+    const colorPalette = [
       new THREE.Color('#c084fc'),
       new THREE.Color('#a855f7'),
-      new THREE.Color('#fbbf24'),
+      new THREE.Color('#e9d5ff'),
       new THREE.Color('#ffffff')
     ];
 
     for (let i = 0; i < starCount; i++) {
-      starPositions[i * 3] = (Math.random() - 0.5) * 120;
-      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 90;
-      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+      positions[i * 3] = (Math.random() - 0.5) * 110;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
 
-      const col = colors[Math.floor(Math.random() * colors.length)];
-      starColors[i * 3] = col.r;
-      starColors[i * 3 + 1] = col.g;
-      starColors[i * 3 + 2] = col.b;
+      const col = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+      colors[i * 3] = col.r;
+      colors[i * 3 + 1] = col.g;
+      colors[i * 3 + 2] = col.b;
     }
 
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+    starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    starGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    const starMaterial = new THREE.PointsMaterial({
-      size: 2.2,
+    const starMat = new THREE.PointsMaterial({
+      size: 2.0,
       vertexColors: true,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.8,
       blending: THREE.AdditiveBlending
     });
 
-    const stars = new THREE.Points(starGeometry, starMaterial);
+    const stars = new THREE.Points(starGeo, starMat);
     scene.add(stars);
 
     // Mouse Parallax
@@ -120,7 +103,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Animation Loop
+    // Animation loop
     let animationFrameId: number;
     let clock = new THREE.Clock();
 
@@ -128,30 +111,17 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
       animationFrameId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
-      // Camera parallax
-      camera.position.x += (mouseX * 8 - camera.position.x) * 0.05;
-      camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
+      // Camera smooth lerp
+      camera.position.x += (mouseX * 6 - camera.position.x) * 0.05;
+      camera.position.y += (mouseY * 4 - camera.position.y) * 0.05;
       camera.lookAt(0, 0, 0);
 
-      // Rotate wireframe meshes
-      torusKnot.rotation.x = elapsed * 0.3;
-      torusKnot.rotation.y = elapsed * 0.4;
-      icosahedron.rotation.x = -elapsed * 0.2;
-      icosahedron.rotation.y = -elapsed * 0.25;
+      // Rotate central 3D wireframe
+      torusKnot.rotation.x = elapsed * 0.25;
+      torusKnot.rotation.y = elapsed * 0.35;
 
-      // Particle Vortex motion
-      const pos = starGeometry.attributes.position.array as Float32Array;
-      const speed = warpSpeedRef.current;
-
-      for (let i = 0; i < starCount; i++) {
-        pos[i * 3 + 2] += speed * 60;
-        if (pos[i * 3 + 2] > 40) {
-          pos[i * 3 + 2] = -40;
-          pos[i * 3] = (Math.random() - 0.5) * 120;
-          pos[i * 3 + 1] = (Math.random() - 0.5) * 90;
-        }
-      }
-      starGeometry.attributes.position.needsUpdate = true;
+      // Rotate starfield
+      stars.rotation.y = elapsed * 0.05;
 
       renderer.render(scene, camera);
     };
@@ -163,12 +133,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
 
-      torusKnotGeo.dispose();
-      torusKnotMat.dispose();
-      icosaGeo.dispose();
-      icosaMat.dispose();
-      starGeometry.dispose();
-      starMaterial.dispose();
+      torusGeo.dispose();
+      torusMat.dispose();
+      starGeo.dispose();
+      starMat.dispose();
 
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);
@@ -177,8 +145,8 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     };
   }, []);
 
-  // Play synthetic futuristic sound effects with Web Audio API
-  const playSciFiSound = (type: 'beep' | 'unlock' | 'laser') => {
+  // Web Audio API Sound Synthesizer
+  const playUnlockSound = () => {
     if (!soundEnabled) return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -190,324 +158,173 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         ctx.resume();
       }
 
+      const now = ctx.currentTime;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
+
       osc.connect(gain);
       gain.connect(ctx.destination);
 
-      const now = ctx.currentTime;
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.35);
 
-      if (type === 'beep') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(800, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      } else if (type === 'unlock') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.exponentialRampToValueAtTime(1600, now + 0.4);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      } else if (type === 'laser') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(1800, now);
-        osc.frequency.exponentialRampToValueAtTime(200, now + 0.5);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-        osc.start(now);
-        osc.stop(now + 0.5);
-      }
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+
+      osc.start(now);
+      osc.stop(now + 0.55);
     } catch {
       // Audio fallback
     }
   };
 
-  // Generate celebration spark particles
-  const triggerCelebrationSparks = () => {
-    const newSparks = [];
-    const colors = ['#c084fc', '#a855f7', '#fbbf24', '#ffffff', '#e879f9', '#60a5fa'];
-    for (let i = 0; i < 45; i++) {
-      newSparks.push({
-        id: i,
-        x: (Math.random() - 0.5) * 850,
-        y: (Math.random() - 0.5) * 650,
-        size: Math.random() * 9 + 4,
-        color: colors[Math.floor(Math.random() * colors.length)]
-      });
-    }
-    setSparks(newSparks);
-  };
-
-  // Automated Progressive Loading
+  // Progressive Loading Simulation
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setActiveStage('ready');
-          playSciFiSound('beep');
           return 100;
         }
-        const next = prev + Math.floor(Math.random() * 12) + 6;
+        const next = prev + Math.floor(Math.random() * 14) + 8;
         return Math.min(next, 100);
       });
-    }, 70);
+    }, 60);
 
     return () => clearInterval(interval);
   }, []);
 
-  const handleGrandOpening = () => {
-    if (isOpening) return;
-    setIsOpening(true);
-    setActiveStage('opening');
-    setHasStartedCelebration(true);
-    warpSpeedRef.current = 0.08; // Accelerate 3D starfield hyperdrive!
-    triggerCelebrationSparks();
-    playSciFiSound('unlock');
-
-    // Slide open doors and reveal portfolio
-    setTimeout(() => {
-      playSciFiSound('laser');
-    }, 300);
+  const handleEnterClick = () => {
+    if (progress < 100 || isEntering) return;
+    setIsEntering(true);
+    playUnlockSound();
 
     setTimeout(() => {
       onEnter();
-    }, 1100);
+    }, 650);
   };
 
+  const isReady = progress >= 100;
+
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden select-none bg-black flex items-center justify-center">
-      
-      {/* =========================================================================
-          3D THREE.JS WEBGL SINGULARITY & VORTEX CANVAS (Background)
-      ========================================================================= */}
+    <div 
+      className={`fixed inset-0 z-50 overflow-hidden select-none bg-[#09090e] flex flex-col items-center justify-between p-6 sm:p-10 transition-all duration-700 ${
+        isEntering ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100 scale-100'
+      }`}
+    >
+      {/* 3D WebGL Canvas Layer */}
       <div 
         ref={threeCanvasRef}
-        className="absolute inset-0 pointer-events-none z-20 overflow-hidden opacity-80"
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-75"
         aria-hidden="true"
       />
 
-      {/* =========================================================================
-          LEFT VAULT SLIDING DOOR
-      ========================================================================= */}
-      <div 
-        className={`absolute inset-y-0 left-0 w-1/2 bg-[#09090e]/95 z-30 transition-transform duration-1000 ease-in-out flex items-center justify-start overflow-hidden backdrop-blur-sm ${
-          isOpening ? '-translate-x-full shadow-[20px_0_50px_rgba(168,85,247,0.8)]' : 'translate-x-0'
-        }`}
-      >
-        {/* Futuristic circuit grid on left door */}
-        <div className="absolute inset-0 tech-grid opacity-30 pointer-events-none" />
-        
-        {/* Left Decorative Hydraulic Marks */}
-        <div className="absolute left-6 sm:left-12 top-10 font-mono text-[10px] text-lilac-400/40 space-y-1 tracking-widest uppercase">
-          <div>// GATE: SECTOR_01_AI</div>
-          <div>// 3D_NEURAL_ENGINE: ACTIVE</div>
+      {/* Ambient Radial Lighting */}
+      <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-0 opacity-60" />
+      <div className="absolute w-[40rem] h-[40rem] rounded-full bg-purple-600/15 blur-[120px] pointer-events-none z-0" />
+
+      {/* Top Bar */}
+      <div className="relative z-10 w-full max-w-4xl flex items-center justify-between pt-2">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lilac-500/10 border border-lilac-500/25 text-lilac-300 text-xs font-mono tracking-widest uppercase backdrop-blur-md">
+          <Sparkles className="w-3.5 h-3.5 text-lilac-400" />
+          <span>AI &amp; MACHINE LEARNING</span>
         </div>
 
-        {/* Inset & Centered AI Monogram */}
-        <div className="text-6xl sm:text-8xl md:text-9xl font-cinzel font-black text-lilac-500/[0.07] ml-8 sm:ml-16 select-none pointer-events-none tracking-widest">
-          AI
-        </div>
+        <button
+          onClick={() => setSoundEnabled(!soundEnabled)}
+          className="p-2.5 rounded-xl bg-obsidian-surface/80 border border-lilac-500/20 text-zinc-400 hover:text-lilac-300 transition-all hover:scale-105 backdrop-blur-md"
+          title={soundEnabled ? "Mute Sound Effects" : "Enable Sound Effects"}
+          aria-label={soundEnabled ? "Mute Sound Effects" : "Enable Sound Effects"}
+        >
+          {soundEnabled ? <Volume2 className="w-4 h-4 text-lilac-400" /> : <VolumeX className="w-4 h-4" />}
+        </button>
       </div>
 
-      {/* =========================================================================
-          RIGHT VAULT SLIDING DOOR
-      ========================================================================= */}
-      <div 
-        className={`absolute inset-y-0 right-0 w-1/2 bg-[#09090e]/95 z-30 transition-transform duration-1000 ease-in-out flex items-center justify-end overflow-hidden backdrop-blur-sm ${
-          isOpening ? 'translate-x-full shadow-[-20px_0_50px_rgba(168,85,247,0.8)]' : 'translate-x-0'
-        }`}
-      >
-        {/* Futuristic circuit grid on right door */}
-        <div className="absolute inset-0 tech-grid opacity-30 pointer-events-none" />
+      {/* Center Hero Card & Action Button */}
+      <div className="relative z-10 max-w-2xl w-full text-center flex flex-col items-center my-auto py-8">
         
-        {/* Right Decorative Status */}
-        <div className="absolute right-6 sm:right-12 top-10 font-mono text-[10px] text-lilac-400/40 space-y-1 tracking-widest text-right uppercase">
-          <div>WEBGL_3D: ENABLED //</div>
-          <div>EST. 2026 //</div>
-        </div>
-
-        {/* Inset & Centered ML Monogram */}
-        <div className="text-6xl sm:text-8xl md:text-9xl font-cinzel font-black text-lilac-500/[0.07] mr-8 sm:mr-16 select-none pointer-events-none tracking-widest">
-          ML
-        </div>
-      </div>
-
-      {/* =========================================================================
-          PORTFOLIO PREVIEW LIGHT BURST (Visible as doors open)
-      ========================================================================= */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-tr from-purple-900 via-lilac-600 to-indigo-900 flex items-center justify-center opacity-90 scale-110 blur-xl pointer-events-none" />
-
-      {/* =========================================================================
-          MAIN CENTER GRAND OPENING TERMINAL & CEREMONIAL LOCK
-      ========================================================================= */}
-      <div className={`relative z-40 max-w-3xl w-full mx-auto px-6 py-8 flex flex-col items-center text-center transition-all duration-700 ${
-        isOpening ? 'scale-110 opacity-0' : 'scale-100 opacity-100'
-      }`}>
-        
-        {/* Top Floating VIP Invitation Badge */}
-        <div className="inline-flex items-center gap-2.5 px-5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-lilac-500/20 to-purple-500/15 border border-amber-400/40 text-amber-300 text-xs font-mono tracking-[0.25em] uppercase mb-6 shadow-[0_0_20px_rgba(251,191,36,0.3)] animate-pulse">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>OFFICIAL DIGITAL LAUNCH • 3D IMMERSIVE GATE</span>
-        </div>
-
-        {/* Centerpiece: Multi-tier 3D Holographic Gyroscope AI Singularity */}
+        {/* Glowing Brain Hologram Icon */}
         <div className="relative mb-6 flex items-center justify-center">
-          
-          {/* Shockwave Energy Ripples */}
-          <div className="absolute w-44 h-44 rounded-full border border-lilac-500/30 animate-shockwave pointer-events-none" />
-          <div className="absolute w-60 h-60 rounded-full border border-amber-400/20 animate-shockwave pointer-events-none" style={{ animationDelay: '1s' }} />
-
-          {/* Outer Multi-layered Gyroscopes */}
-          <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-full border-2 border-dashed border-lilac-400/60 animate-spin-slow flex items-center justify-center shadow-[0_0_40px_rgba(192,132,252,0.4)]">
-            <div 
-              className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-amber-400/40 flex items-center justify-center"
-              style={{ animation: 'spin-slow 14s linear infinite reverse' }}
-            />
-          </div>
-
-          {/* Center Holographic AI Sphere */}
-          <div className="absolute w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-purple-800 via-lilac-500 to-amber-400 p-1 shadow-[0_0_60px_rgba(192,132,252,0.9)] flex items-center justify-center animate-float">
-            <div className="w-full h-full rounded-full bg-[#09090e] flex flex-col items-center justify-center border-2 border-lilac-300/60 shadow-inner">
-              <BrainCircuit className="w-12 h-12 sm:w-16 sm:h-16 text-lilac-200 animate-pulse drop-shadow-[0_0_15px_rgba(192,132,252,0.8)]" />
-              
-              {/* Equalizer Wave Bars under core */}
-              <div className="flex items-end gap-1 mt-1 h-3">
-                <span className="w-1 bg-lilac-400 rounded-full animate-eq-1" />
-                <span className="w-1 bg-amber-300 rounded-full animate-eq-2" />
-                <span className="w-1 bg-purple-400 rounded-full animate-eq-3" />
-                <span className="w-1 bg-lilac-400 rounded-full animate-eq-4" />
-                <span className="w-1 bg-amber-300 rounded-full animate-eq-5" />
-              </div>
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-purple-700 via-lilac-500 to-indigo-600 p-[1.5px] shadow-[0_0_45px_rgba(192,132,252,0.6)] animate-float">
+            <div className="w-full h-full rounded-3xl bg-[#09090e] flex items-center justify-center border border-lilac-300/30">
+              <BrainCircuit className="w-10 h-10 sm:w-12 sm:h-12 text-lilac-200 animate-pulse drop-shadow-[0_0_15px_rgba(192,132,252,0.8)]" />
             </div>
           </div>
-
-          {/* Floating Key Metric Pills */}
-          <div className="absolute -left-10 sm:-left-16 top-4 px-3 py-1 rounded-xl bg-obsidian-surface/90 border border-lilac-500/30 text-[10px] font-mono text-lilac-300 shadow-xl hidden sm:flex items-center gap-1.5 animate-float" style={{ animationDelay: '0.5s' }}>
-            <Radio className="w-3 h-3 text-amber-400 animate-ping" />
-            <span>AIML 2024-2028</span>
-          </div>
-
-          <div className="absolute -right-10 sm:-right-16 top-4 px-3 py-1 rounded-xl bg-obsidian-surface/90 border border-lilac-500/30 text-[10px] font-mono text-lilac-300 shadow-xl hidden sm:flex items-center gap-1.5 animate-float" style={{ animationDelay: '1.5s' }}>
-            <Sparkles className="w-3 h-3 text-lilac-400" />
-            <span>10,000+ Records</span>
-          </div>
-
-          <div className="absolute -left-8 sm:-left-14 bottom-4 px-3 py-1 rounded-xl bg-obsidian-surface/90 border border-lilac-500/30 text-[10px] font-mono text-lilac-300 shadow-xl hidden sm:flex items-center gap-1.5 animate-float" style={{ animationDelay: '2s' }}>
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>9+ Credentials</span>
-          </div>
-
-          <div className="absolute -right-8 sm:-right-14 bottom-4 px-3 py-1 rounded-xl bg-obsidian-surface/90 border border-lilac-500/30 text-[10px] font-mono text-lilac-300 shadow-xl hidden sm:flex items-center gap-1.5 animate-float" style={{ animationDelay: '1s' }}>
-            <Terminal className="w-3 h-3 text-lilac-400" />
-            <span>Agentic Systems</span>
-          </div>
         </div>
 
-        {/* Small Intro Line */}
-        <p className="text-xs sm:text-sm font-mono tracking-[0.35em] text-lilac-300/80 uppercase mb-1">
-          WELCOME TO THE 3D DIGITAL REALM OF
-        </p>
-
-        {/* Monumental Highlighted Name Typography */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-black tracking-wider uppercase leading-tight mb-2 animated-name-highlight drop-shadow-[0_0_40px_rgba(192,132,252,0.8)]">
+        {/* Name Title */}
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-black tracking-wider uppercase leading-tight mb-2 animated-name-highlight drop-shadow-[0_0_35px_rgba(192,132,252,0.7)]">
           {personalInfo.name}
         </h1>
 
-        {/* Core Subtitle */}
-        <p className="text-xs sm:text-sm font-cinzel font-bold tracking-widest text-amber-300 uppercase mb-6">
-          ARTIFICIAL INTELLIGENCE &amp; MACHINE LEARNING ENGINEER
+        {/* AI & ML Role */}
+        <h2 className="text-lg sm:text-2xl font-cinzel font-bold text-white tracking-widest uppercase mb-2">
+          ARTIFICIAL INTELLIGENCE &amp; MACHINE LEARNING
+        </h2>
+
+        <p className="text-xs sm:text-sm font-mono text-lilac-300/80 mb-10">
+          Amrita Sai Institute of Science &amp; Technology • Python Developer
         </p>
 
-        {/* Live System Diagnostics Loading Bar */}
-        <div className="w-full max-w-md rounded-2xl bg-obsidian-surface/90 border border-lilac-500/30 p-3.5 mb-7 shadow-2xl backdrop-blur-md">
-          <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 mb-2">
-            <span className="flex items-center gap-1.5 text-lilac-300">
-              <Terminal className="w-3.5 h-3.5" />
-              {activeStage === 'opening' 
-                ? 'INITIALIZING 3D WARP SEQUENCE...' 
-                : activeStage === 'ready' 
-                ? '3D ENGINES READY • ACCESS GRANTED' 
-                : 'SYNCHRONIZING 3D NEURAL NODES...'}
-            </span>
-            <span className="font-bold text-amber-400">{progress}%</span>
-          </div>
-
-          <div className="w-full h-2 rounded-full bg-black border border-lilac-500/20 overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-purple-600 via-lilac-500 to-amber-400 transition-all duration-150 shadow-[0_0_15px_rgba(251,191,36,0.8)]"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-
-        {/* =====================================================================
-            INTERACTIVE BIOMETRIC GRAND OPENING BUTTON TRIGGER
-        ===================================================================== */}
-        <div className="relative group">
+        {/* Center Loading Bar & Enter Button */}
+        <div className="w-full max-w-md flex flex-col items-center">
           
-          {/* Pulsing button halo */}
-          <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-amber-400 via-lilac-500 to-purple-600 opacity-75 blur-lg group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+          {!isReady ? (
+            /* Loading State Pill */
+            <div className="w-full rounded-2xl bg-obsidian-surface/90 border border-lilac-500/30 p-4 shadow-xl backdrop-blur-md">
+              <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
+                <span className="flex items-center gap-2 text-lilac-300">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-lilac-400" />
+                  INITIALIZING AI &amp; ML CORE...
+                </span>
+                <span className="font-bold text-lilac-300">{progress}%</span>
+              </div>
 
+              {/* Progress Bar Fill */}
+              <div className="w-full h-2 rounded-full bg-black/60 border border-lilac-500/20 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-purple-600 via-lilac-500 to-indigo-500 transition-all duration-150 shadow-[0_0_12px_rgba(192,132,252,0.8)]"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          ) : (
+            /* Ready Enter Button */
+            <div className="relative group w-full sm:w-auto">
+              {/* Glowing Aura Ring */}
+              <div className="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 opacity-75 blur-md group-hover:opacity-100 transition-opacity duration-300 animate-pulse" />
+
+              <button
+                onClick={handleEnterClick}
+                className="relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 sm:px-14 py-4 sm:py-4.5 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 hover:from-lilac-400 hover:to-indigo-500 text-white font-cinzel font-black text-sm sm:text-base uppercase tracking-widest shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                <span>ENTER AI &amp; ML PORTFOLIO</span>
+                <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          )}
+
+          {/* Skip option */}
           <button
-            onClick={handleGrandOpening}
-            className="relative inline-flex items-center justify-center gap-3.5 px-10 sm:px-14 py-4 sm:py-5 rounded-2xl bg-gradient-to-r from-amber-400 via-lilac-400 to-purple-600 hover:from-amber-300 hover:to-purple-500 text-black font-cinzel font-black text-sm sm:text-base uppercase tracking-widest shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-white/40"
+            onClick={() => {
+              playUnlockSound();
+              setIsEntering(true);
+              setTimeout(() => onEnter(), 400);
+            }}
+            className="text-[11px] font-mono text-zinc-500 hover:text-lilac-300 transition-colors mt-6 tracking-wider uppercase"
           >
-            {activeStage === 'opening' ? (
-              <Unlock className="w-5 h-5 animate-spin" />
-            ) : activeStage === 'ready' ? (
-              <Fingerprint className="w-5 h-5 animate-pulse" />
-            ) : (
-              <Lock className="w-5 h-5" />
-            )}
-            
-            <span>{activeStage === 'opening' ? '3D WARP OPENING...' : 'UNLOCK & ENTER 3D PORTFOLIO'}</span>
-          </button>
-        </div>
-
-        {/* Celebration Sparks Blast during opening */}
-        {hasStartedCelebration && (
-          <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center">
-            {sparks.map((spark) => (
-              <div
-                key={spark.id}
-                className="absolute rounded-full animate-ping"
-                style={{
-                  width: `${spark.size}px`,
-                  height: `${spark.size}px`,
-                  backgroundColor: spark.color,
-                  transform: `translate(${spark.x}px, ${spark.y}px)`,
-                  transition: 'all 1s cubic-bezier(0.1, 0.8, 0.2, 1)'
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Bottom Audio Toggle & Quick Enter Strip */}
-        <div className="flex items-center justify-between w-full max-w-md mt-6 pt-4 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500">
-          <button
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className="flex items-center gap-1.5 hover:text-lilac-300 transition-colors"
-          >
-            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-lilac-400" /> : <VolumeX className="w-3.5 h-3.5" />}
-            <span>Sound FX: {soundEnabled ? 'ON' : 'OFF'}</span>
-          </button>
-
-          <button
-            onClick={handleGrandOpening}
-            className="hover:text-lilac-300 transition-colors uppercase tracking-wider"
-          >
-            Skip Intro &gt;&gt;
+            Skip to Portfolio &gt;&gt;
           </button>
         </div>
 
       </div>
+
+      {/* Bottom Sub-tag */}
+      <div className="relative z-10 text-[11px] font-mono text-zinc-500 text-center pb-2">
+        © 2026 {personalInfo.name} • Built with React, Three.js &amp; Tailwind CSS
+      </div>
+
     </div>
   );
 };
