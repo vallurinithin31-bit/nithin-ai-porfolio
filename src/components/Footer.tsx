@@ -1,7 +1,7 @@
 import React from 'react';
-import { Terminal, Mail, ArrowUp, Instagram } from 'lucide-react';
+import { Terminal, Mail, ArrowUp } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
-import { LinkedinIcon, GithubIcon } from './Icons';
+import { LinkedinIcon, GithubIcon, InstagramIcon } from './Icons';
 
 export const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
               aria-label="Instagram"
               className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
             >
-              <Instagram className="w-4 h-4" />
+              <InstagramIcon className="w-4 h-4" />
             </a>
 
             <a
@@ -108,7 +108,7 @@ export const Footer: React.FC = () => {
 
         {/* Copyright Line */}
         <div className="mt-10 pt-7 border-t border-lilac-500/15 text-center text-xs font-mono text-zinc-500">
-          © 2026 {personalInfo.name}. All Rights Reserved. • Artificial Intelligence &amp; Machine Learning
+          <p>© 2026 {personalInfo.name}. All Rights Reserved. Crafted with React, Tailwind CSS &amp; Three.js.</p>
         </div>
       </div>
     </footer>

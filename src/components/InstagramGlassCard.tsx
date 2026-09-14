@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { 
-  Instagram, 
   MessageCircle, 
   Share2, 
-  Sparkles, 
-  ExternalLink, 
   Check, 
   Heart,
   Flame,
   UserPlus
 } from 'lucide-react';
 import { TiltCard3D } from './TiltCard3D';
-import { personalInfo } from '../data/portfolioData';
+import { InstagramIcon } from './Icons';
 
 interface InstagramGlassCardProps {
   onToast?: (msg: string, type?: 'success' | 'info' | 'error') => void;
@@ -64,7 +61,7 @@ export const InstagramGlassCard: React.FC<InstagramGlassCardProps> = ({ onToast,
           <div className="relative z-10 flex items-center justify-between pb-4 border-b border-white/10">
             <div className="inline-flex items-center gap-2">
               <div className="p-1.5 rounded-xl bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 text-white shadow-md">
-                <Instagram className="w-3.5 h-3.5" />
+                <InstagramIcon className="w-3.5 h-3.5" />
               </div>
               <span className="font-mono text-xs font-bold text-white tracking-wider">
                 valluri_nani_
@@ -93,7 +90,6 @@ export const InstagramGlassCard: React.FC<InstagramGlassCardProps> = ({ onToast,
                   alt="Valluri Nani"
                   className="w-full h-full object-cover group-hover/avatar:scale-110 transition-transform duration-300"
                   onError={(e) => {
-                    // Fallback to anime profile
                     (e.target as HTMLElement).style.display = 'none';
                   }}
                 />
