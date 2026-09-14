@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon } from './Icons';
+import { InstagramGlassCard } from './InstagramGlassCard';
 
 interface ContactProps {
   onToast: (msg: string, type?: 'success' | 'info' | 'error') => void;
@@ -202,6 +203,9 @@ export const Contact: React.FC<ContactProps> = ({ onToast }) => {
                 <span>{personalInfo.socials.location} • Available for Remote &amp; Onsite Internships</span>
               </div>
             </div>
+
+            {/* 3D Holographic Transparent Instagram ID Card */}
+            <InstagramGlassCard onToast={onToast} />
 
           </div>
 

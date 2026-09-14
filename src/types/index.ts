@@ -13,6 +13,7 @@ export interface PersonalInfo {
     linkedin: string;
     github: string;
     email: string;
+    instagram?: string;
     location?: string;
     phone?: string;
     driveCertificates?: string;

@@ -30,7 +30,8 @@ export const personalInfo: PersonalInfo = {
   socials: {
     linkedin: "https://www.linkedin.com/in/nithin-sai-valluri-a947b0410",
     github: "https://github.com/vallurinithin31-bit",
-    email: "vallurinithin31@gmail.com",
+    instagram: "https://www.instagram.com/valluri_nani_/",
+    email: "vallurinithin989@gmail.com",
     location: "Vijayawada, India",
     phone: "+918121467245",
     driveCertificates: "https://drive.google.com/drive/folders/1wuKqIYfjg9ChGK_-vwSm9cNlOi9Xa8Z6?usp=sharing"

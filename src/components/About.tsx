@@ -10,6 +10,7 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 import { personalInfo, educationInfo, currentlyLearningList } from '../data/portfolioData';
+import { InstagramGlassCard } from './InstagramGlassCard';
 
 export const About: React.FC = () => {
   return (
@@ -160,6 +161,11 @@ export const About: React.FC = () => {
                   <strong className="text-white font-semibold">Honest Skill Progression:</strong> I prioritize deep conceptual understanding and verified practical code over superficial buzzwords.
                 </span>
               </div>
+            </div>
+
+            {/* Holographic 3D Transparent Instagram ID Card */}
+            <div className="pt-2">
+              <InstagramGlassCard />
             </div>
 
           </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Terminal, Mail, ArrowUp } from 'lucide-react';
+import { Terminal, Mail, ArrowUp, Instagram } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon } from './Icons';
 
@@ -74,6 +74,16 @@ export const Footer: React.FC = () => {
               className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
             >
               <GithubIcon className="w-4 h-4" />
+            </a>
+
+            <a
+              href="https://www.instagram.com/valluri_nani_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
+            >
+              <Instagram className="w-4 h-4" />
             </a>
 
             <a
