@@ -6,6 +6,7 @@ import {
   Code2, 
   ArrowUpRight
 } from 'lucide-react';
+import { TiltCard3D } from './TiltCard3D';
 
 export const WhatIDo: React.FC = () => {
   const services = [
@@ -60,43 +61,42 @@ export const WhatIDo: React.FC = () => {
 
         </div>
 
-        {/* 4 Numbered Cards Grid */}
+        {/* 4 Numbered Cards Grid with 3D Physics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((item) => {
             const Icon = item.icon;
             return (
-              <div
-                key={item.id}
-                className="glass-panel rounded-3xl p-7 flex flex-col justify-between border border-lilac-500/20 ai-glow-card group hover:-translate-y-2 transition-all duration-300"
-              >
-                <div>
-                  {/* Icon & Corner Star */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="p-3 rounded-2xl bg-lilac-500/10 text-lilac-300 border border-lilac-500/25 group-hover:scale-110 group-hover:bg-lilac-500 group-hover:text-black transition-all">
-                      <Icon className="w-5 h-5" />
+              <TiltCard3D key={item.id} className="h-full">
+                <div className="glass-panel rounded-3xl p-7 flex flex-col justify-between border border-lilac-500/20 ai-glow-card group transition-all duration-300 h-full shadow-lg hover:shadow-purple-950/40">
+                  <div>
+                    {/* Icon & Corner Star */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="p-3 rounded-2xl bg-lilac-500/10 text-lilac-300 border border-lilac-500/25 group-hover:scale-110 group-hover:bg-lilac-500 group-hover:text-black transition-all">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-lilac-400/50 group-hover:text-lilac-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
                     </div>
-                    <ArrowUpRight className="w-4 h-4 text-lilac-400/50 group-hover:text-lilac-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+
+                    {/* Title */}
+                    <h3 className="text-base font-cinzel font-bold text-white tracking-wider mb-3 group-hover:text-lilac-200 transition-colors">
+                      {item.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-xs text-zinc-400 leading-relaxed font-normal">
+                      {item.description}
+                    </p>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-base font-cinzel font-bold text-white tracking-wider mb-3 group-hover:text-lilac-200 transition-colors">
-                    {item.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-xs text-zinc-400 leading-relaxed font-normal">
-                    {item.description}
-                  </p>
+                  {/* Bottom Number ID */}
+                  <div className="pt-6 mt-6 border-t border-lilac-500/15 flex items-center justify-between">
+                    <span className="font-mono text-xs text-lilac-400/80 font-bold tracking-widest">
+                      {item.id}
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-lilac-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                  </div>
                 </div>
-
-                {/* Bottom Number ID */}
-                <div className="pt-6 mt-6 border-t border-lilac-500/15 flex items-center justify-between">
-                  <span className="font-mono text-xs text-lilac-400/80 font-bold tracking-widest">
-                    {item.id}
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-lilac-400 opacity-40 group-hover:opacity-100 transition-opacity" />
-                </div>
-              </div>
+              </TiltCard3D>
             );
           })}
         </div>

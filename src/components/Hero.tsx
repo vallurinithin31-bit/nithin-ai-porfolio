@@ -3,7 +3,6 @@ import {
   ArrowRight, 
   Download, 
   Mail, 
-  BrainCircuit,
   Sparkles,
   Terminal,
   Cpu,
@@ -12,6 +11,8 @@ import {
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon } from './Icons';
+import { ThreeHeroHologram } from './ThreeHeroHologram';
+import { TiltCard3D } from './TiltCard3D';
 
 interface HeroProps {
   onOpenResumeModal: () => void;
@@ -20,7 +21,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
   const handleDownloadResume = () => {
-    onToast("Opening Executive Digital Resume viewer...", "info");
+    onToast("Opening Executive Digital Resume viewer with PDF download...", "info");
   };
 
   const professionPills = [
@@ -39,114 +40,78 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
         <span>•</span>
         <span>AGENTIC AI</span>
         <span>•</span>
-        <span>DATA PIPELINES —</span>
+        <span>PYTHON SPECIALIST</span>
       </div>
 
-      <div className="hidden xl:flex fixed right-6 top-1/2 -translate-y-1/2 rotate-90 origin-right items-center gap-4 text-[10px] font-mono tracking-[0.35em] text-lilac-400/40 uppercase pointer-events-none z-20">
-        <span>— DEEP LEARNING</span>
-        <span>•</span>
-        <span>PYTHON DEV</span>
-        <span>•</span>
-        <span>INTELLIGENT SYSTEMS —</span>
-      </div>
-
-      {/* Main Hero Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 my-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full my-auto">
         
-        {/* Top Mini Tagline & Status */}
-        <div className="flex items-center justify-between border-b border-lilac-500/15 pb-3.5 mb-8 text-xs font-mono uppercase tracking-widest text-zinc-400">
-          <div className="flex items-center gap-2">
-            <span className="text-lilac-400 text-base font-bold animate-pulse">✦</span>
-            <span className="font-semibold tracking-wider text-lilac-200">AI &amp; MACHINE LEARNING SPECIALIST</span>
-          </div>
+        {/* Main 2-Column Hero Structure */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           
-          <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-lilac-500/10 border border-lilac-500/25 text-lilac-300 text-[11px] font-mono">
-            <Sparkles className="w-3 h-3 text-lilac-400" />
-            <span>AMRITA SAI INSTITUTE OF SCIENCE &amp; TECHNOLOGY</span>
-          </div>
-        </div>
-
-        {/* Main Composition */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
-          
-          {/* Left / Center-Left: Prominent Title, Profession Bullets & Animated Bio Box */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left z-20">
+          {/* Left Column: Monumental Name, Profession Badges & Bio Box */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
             
-            {/* 1. Grand Name Title */}
-            <div className="relative mb-2 select-none w-full">
-              <span className="text-[11px] sm:text-xs font-mono tracking-[0.35em] uppercase text-lilac-400 font-bold block mb-1.5">
-                ✦ OFFICIAL PORTFOLIO OF
+            {/* Top Status Badge */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-lilac-500/10 border border-lilac-500/30 text-lilac-300 text-xs font-mono tracking-widest uppercase backdrop-blur-md shadow-lg shadow-purple-950/40">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span>Available for AI/ML Internships &amp; Roles</span>
+            </div>
+
+            {/* 1. TITLE: Full Name */}
+            <div className="space-y-2">
+              <span className="text-xs font-mono tracking-[0.3em] uppercase text-zinc-400 block">
+                Official Portfolio • {personalInfo.socials.location || 'Vijayawada, India'}
               </span>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-cinzel font-black tracking-wider uppercase leading-tight animated-name-highlight drop-shadow-[0_0_25px_rgba(192,132,252,0.7)]">
+              <h1 className="font-cinzel font-black uppercase text-2xl sm:text-4xl md:text-5xl tracking-wider leading-tight animated-name-highlight">
                 {personalInfo.name}
               </h1>
             </div>
 
-            {/* 2. Specialization Subtitle */}
-            <div className="mb-4">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-cinzel font-black tracking-tight text-white leading-tight">
-                AI &amp; MACHINE LEARNING <span className="text-transparent bg-clip-text bg-gradient-to-r from-lilac-300 via-lilac-400 to-purple-500">ENGINEER</span>
+            {/* 2. SUBTITLE / PROFESSION HIGHLIGHT */}
+            <div className="w-full space-y-3">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-cinzel font-bold text-white tracking-widest uppercase">
+                AI &amp; MACHINE LEARNING ENGINEER
               </h2>
+
+              {/* Specialization Bullet Badges */}
+              <div className="flex flex-wrap gap-2.5 pt-1">
+                {professionPills.map((pill, idx) => {
+                  const Icon = pill.icon;
+                  return (
+                    <div
+                      key={idx}
+                      className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-obsidian-surface/90 border border-lilac-500/25 text-xs font-mono text-lilac-200 shadow-sm backdrop-blur-sm hover:border-lilac-400/60 transition-colors"
+                    >
+                      <Icon className="w-3.5 h-3.5 text-lilac-400" />
+                      <span>{pill.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* 3. Profession Highlighted with Bullet Point Pills */}
-            <div className="flex flex-wrap items-center gap-2.5 mb-6">
-              {professionPills.map((pill, idx) => {
-                const Icon = pill.icon;
-                return (
-                  <div
-                    key={idx}
-                    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-obsidian-surface/90 border border-lilac-500/25 text-lilac-200 text-xs font-mono shadow-md hover:border-lilac-400/80 hover:bg-lilac-950/40 hover:scale-105 transition-all duration-200 group"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-lilac-400 shadow-[0_0_8px_#c084fc] animate-pulse" />
-                    <Icon className="w-3.5 h-3.5 text-lilac-300 group-hover:text-white transition-colors" />
-                    <span className="font-semibold tracking-wide">{pill.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* 4. Animated Glassmorphic Bio Box ("Box Appeal in Animated Way") */}
-            <div className="relative w-full max-w-2xl rounded-3xl p-6 sm:p-7 glass-panel border border-lilac-500/30 ai-glow-card overflow-hidden group shadow-2xl mb-6">
+            {/* 3. ANIMATED BIO BOX */}
+            <div className="w-full relative group">
+              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-lilac-500/30 via-purple-600/20 to-indigo-600/30 opacity-40 group-hover:opacity-75 blur-sm transition-opacity duration-500 pointer-events-none" />
               
-              {/* Inner subtle tech grid & ambient glow */}
-              <div className="absolute inset-0 tech-grid opacity-20 pointer-events-none" />
-              <div className="absolute -right-10 -bottom-10 w-36 h-36 bg-lilac-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
-              <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-lilac-400 via-purple-600 to-indigo-600 rounded-l-3xl" />
-
-              {/* Bio Box Header */}
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-lilac-500/15">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-lilac-500/15 text-lilac-300 border border-lilac-500/30">
-                    <Terminal className="w-3.5 h-3.5" />
+              <div className="relative rounded-2xl bg-obsidian-surface/90 border border-lilac-500/30 p-5 sm:p-6 backdrop-blur-md shadow-xl flex gap-4 items-start">
+                
+                {/* Vertical Glowing Accent Bar */}
+                <div className="w-1.5 self-stretch rounded-full bg-gradient-to-b from-lilac-400 via-purple-500 to-indigo-500 shrink-0" />
+                
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+                    <Terminal className="w-3.5 h-3.5 text-lilac-400" />
+                    <span>PROFESSIONAL SUMMARY &amp; BIO</span>
                   </div>
-                  <span className="text-[11px] font-mono font-bold tracking-widest text-lilac-200 uppercase">
-                    EXECUTIVE SUMMARY &amp; BIO
-                  </span>
+                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+                    {personalInfo.aboutText}
+                  </p>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Active Engineer</span>
-                </div>
-              </div>
-
-              {/* Bio Text */}
-              <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed font-normal">
-                {personalInfo.intro}
-              </p>
-
-              {/* Monospace Tech Tag Bar inside Box */}
-              <div className="mt-4 pt-3 border-t border-lilac-500/15 flex items-center justify-between">
-                <span className="text-[11px] font-mono text-lilac-300 font-semibold tracking-widest">
-                  &lt;/ DATA. ALGORITHMS. AGENTS. DEPLOY /&gt;
-                </span>
-                <span className="text-[10px] font-mono text-zinc-500 uppercase">
-                  Python • ML • RAG
-                </span>
               </div>
             </div>
 
-            {/* 5. Action Buttons & Social Links */}
+            {/* CTA Action Buttons & Socials */}
             <div className="space-y-4 w-full">
               <div className="flex flex-wrap gap-3">
                 <a
@@ -173,7 +138,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
                   className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 font-semibold text-xs uppercase tracking-wider transition-all duration-200"
                 >
                   <Download className="w-3.5 h-3.5 text-lilac-400" />
-                  <span>Resume</span>
+                  <span>Resume PDF</span>
                 </button>
               </div>
 
@@ -210,55 +175,47 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
 
           </div>
 
-          {/* Right Column: High-Tech Holographic Visual Frame & Rotating Stamp */}
+          {/* Right Column: 3D Holographic AI Core Frame with Three.js WebGL Core */}
           <div className="lg:col-span-5 relative flex items-center justify-center pt-8 lg:pt-0">
             
-            {/* Cosmic Violet Nebula Spray behind the character visual */}
+            {/* Cosmic Violet Nebula Spray */}
             <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-purple-800 via-lilac-600 to-indigo-600 shadow-2xl opacity-40 blur-3xl animate-pulse-slow pointer-events-none" />
 
-            {/* Glowing Holographic AI Core Frame */}
-            <div className="relative z-10 w-full max-w-sm aspect-[4/5] rounded-3xl overflow-hidden glass-panel border border-lilac-500/30 p-7 flex flex-col items-center justify-between text-center group ai-glow-card">
-              
-              {/* Inner subtle tech grid */}
-              <div className="absolute inset-0 tech-grid opacity-30 pointer-events-none" />
-
-              {/* Status Header */}
-              <div className="w-full flex items-center justify-center z-10">
-                <span className="px-4 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-lilac-500/15 text-lilac-300 border border-lilac-500/30 font-bold">
-                  AI &amp; ML CORE
-                </span>
-              </div>
-
-              {/* Holographic Glowing Core */}
-              <div className="relative my-auto flex items-center justify-center">
+            {/* Glowing 3D Interactive Holographic AI Core Frame */}
+            <TiltCard3D className="w-full max-w-sm">
+              <div className="relative z-10 w-full aspect-[4/5] rounded-3xl overflow-hidden glass-panel border border-lilac-500/30 p-6 flex flex-col items-center justify-between text-center group ai-glow-card shadow-2xl">
                 
-                {/* Multi-tier rotating aura rings */}
-                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-dashed border-lilac-400/40 animate-spin-slow flex items-center justify-center">
-                  <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border border-purple-500/30 flex items-center justify-center" />
+                {/* Inner subtle tech grid */}
+                <div className="absolute inset-0 tech-grid opacity-30 pointer-events-none" />
+
+                {/* Status Header */}
+                <div className="w-full flex items-center justify-between z-10">
+                  <span className="px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-lilac-500/15 text-lilac-300 border border-lilac-500/30 font-bold">
+                    3D AI &amp; ML CORE
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    ONLINE
+                  </span>
                 </div>
 
-                <div className="absolute w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr from-purple-700 to-lilac-400 p-1 shadow-2xl shadow-purple-900/80 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                  <div className="w-full h-full rounded-full bg-obsidian-base flex items-center justify-center border border-lilac-300/30">
-                    <BrainCircuit className="w-12 h-12 sm:w-16 sm:h-16 text-lilac-300 animate-pulse" />
-                  </div>
+                {/* Interactive 3D WebGL Hologram Orb */}
+                <div className="relative my-auto flex items-center justify-center py-2">
+                  <ThreeHeroHologram />
                 </div>
 
-                {/* Sparkling accent stars */}
-                <span className="absolute -top-2 right-2 text-lilac-300 animate-ping">✦</span>
-                <span className="absolute bottom-2 -left-2 text-purple-400 text-xs">✦</span>
-              </div>
+                {/* High-Tech Badge Information */}
+                <div className="space-y-1.5 z-10 w-full pt-4 border-t border-lilac-500/20">
+                  <h3 className="font-cinzel text-base font-bold text-white tracking-wider">
+                    Intelligent Agent Studio
+                  </h3>
+                  <p className="text-xs text-lilac-300/80 font-mono">
+                    Python • RAG • LLMs • Predictive Models
+                  </p>
+                </div>
 
-              {/* High-Tech Badge Information */}
-              <div className="space-y-1.5 z-10 w-full pt-4 border-t border-lilac-500/20">
-                <h3 className="font-cinzel text-base font-bold text-white tracking-wider">
-                  Intelligent Agent Studio
-                </h3>
-                <p className="text-xs text-lilac-300/80 font-mono">
-                  Python • RAG • LLMs • Predictive Models
-                </p>
               </div>
-
-            </div>
+            </TiltCard3D>
 
             {/* Rotating Circular Stamp Badge / Monogram in Upper Corner */}
             <div className="absolute -top-6 right-2 sm:-top-8 sm:right-4 z-30 w-28 h-28 sm:w-36 sm:h-36 pointer-events-none">

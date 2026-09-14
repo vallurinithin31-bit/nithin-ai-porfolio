@@ -3,6 +3,7 @@ import {
   Sparkles, 
   ArrowUpRight 
 } from 'lucide-react';
+import { TiltCard3D } from './TiltCard3D';
 
 export const BentoGridSection: React.FC = () => {
   const toolkit = [
@@ -47,133 +48,143 @@ export const BentoGridSection: React.FC = () => {
     <section id="toolkit-process" className="py-24 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Bento Grid: 3 Columns Matching the Poster */}
+        {/* Bento Grid: 3 Columns with 3D Tilt */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-stretch">
           
           {/* COLUMN 1: MY TOOLKIT (4 cols) */}
-          <div className="lg:col-span-4 glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-5 pb-3 border-b border-lilac-500/15">
-                <h3 className="font-cinzel text-lg font-bold text-white tracking-wider">
-                  MY TOOLKIT
-                </h3>
-                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-lilac-500/10 text-lilac-300 border border-lilac-500/20">
-                  12 Technologies
-                </span>
+          <TiltCard3D className="lg:col-span-4 h-full">
+            <div className="glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between h-full shadow-lg hover:shadow-purple-950/40">
+              <div>
+                <div className="flex items-center justify-between mb-5 pb-3 border-b border-lilac-500/15">
+                  <h3 className="font-cinzel text-lg font-bold text-white tracking-wider">
+                    MY TOOLKIT
+                  </h3>
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-lilac-500/10 text-lilac-300 border border-lilac-500/20">
+                    12 Technologies
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  {toolkit.map((tool) => (
+                    <div
+                      key={tool.name}
+                      className="p-3 rounded-2xl bg-obsidian-surface/90 border border-lilac-500/15 hover:border-lilac-400/50 transition-all flex flex-col justify-between group"
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="w-6 h-6 rounded-lg bg-lilac-500/15 text-lilac-300 text-[10px] font-mono font-bold flex items-center justify-center border border-lilac-500/25 group-hover:bg-lilac-500 group-hover:text-black transition-colors">
+                          {tool.tag}
+                        </span>
+                        <span className="w-1 h-1 rounded-full bg-lilac-400 opacity-40 group-hover:opacity-100" />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-semibold text-white group-hover:text-lilac-200 transition-colors">
+                          {tool.name}
+                        </h4>
+                        <p className="text-[10px] font-mono text-zinc-500 truncate">
+                          {tool.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
-                {toolkit.map((tool) => (
-                  <div
-                    key={tool.name}
-                    className="p-3 rounded-2xl bg-obsidian-surface/90 border border-lilac-500/15 hover:border-lilac-400/50 transition-all flex flex-col justify-between group"
-                  >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="w-6 h-6 rounded-lg bg-lilac-500/15 text-lilac-300 text-[10px] font-mono font-bold flex items-center justify-center border border-lilac-500/25 group-hover:bg-lilac-500 group-hover:text-black transition-colors">
-                        {tool.tag}
-                      </span>
-                      <span className="w-1 h-1 rounded-full bg-lilac-400 opacity-40 group-hover:opacity-100" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-semibold text-white group-hover:text-lilac-200 transition-colors">
-                        {tool.name}
-                      </h4>
-                      <p className="text-[10px] font-mono text-zinc-500 truncate">
-                        {tool.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="mt-5 pt-3 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
+                <span>Modern AI &amp; Web Stack</span>
+                <span className="text-lilac-400">Ready for scale</span>
               </div>
             </div>
-
-            <div className="mt-5 pt-3 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
-              <span>Modern AI &amp; Web Stack</span>
-              <span className="text-lilac-400">Ready for scale</span>
-            </div>
-          </div>
+          </TiltCard3D>
 
           {/* COLUMN 2: WORK PROCESS (4 cols) */}
-          <div className="lg:col-span-4 glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-6 pb-3 border-b border-lilac-500/15">
-                <h3 className="font-cinzel text-lg font-bold text-white tracking-wider">
-                  WORK PROCESS
-                </h3>
-                <span className="text-[11px] font-mono text-lilac-400 font-bold">
-                  4 Iterative Stages
-                </span>
-              </div>
-
-              {/* Vertical Step Timeline */}
-              <div className="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-gradient-to-b before:from-lilac-500 before:via-purple-500/50 before:to-transparent">
-                {processSteps.map((step) => (
-                  <div key={step.step} className="relative group">
-                    
-                    {/* Number Bullet */}
-                    <div className="absolute -left-6 top-0 w-6 h-6 rounded-full bg-obsidian-base border-2 border-lilac-400 text-lilac-300 text-[10px] font-mono font-bold flex items-center justify-center group-hover:bg-lilac-500 group-hover:text-black transition-all">
-                      {step.step}
-                    </div>
-
-                    <div className="pl-3">
-                      <h4 className="text-xs font-cinzel font-bold text-white tracking-wide group-hover:text-lilac-200 transition-colors">
-                        {step.title}
-                      </h4>
-                      <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-5 pt-3 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500">
-              Rigorous, test-driven AI workflow
-            </div>
-          </div>
-
-          {/* COLUMN 3: SOLID ROYAL VIOLET CTA CARD (4 cols) */}
-          <div className="lg:col-span-4 rounded-3xl p-8 bg-gradient-to-br from-lilac-500 via-purple-600 to-indigo-700 text-white shadow-2xl shadow-purple-950/80 flex flex-col justify-between relative overflow-hidden group">
-            
-            {/* Ambient Graphic Elements inside CTA card */}
-            <div className="absolute -right-12 -top-12 w-48 h-48 bg-white/15 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
-            <div className="absolute -left-12 -bottom-12 w-48 h-48 bg-black/20 rounded-full blur-2xl pointer-events-none" />
-
-            <div className="relative z-10 space-y-6">
-              
-              {/* Header Sparkle */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 text-white text-[11px] font-mono backdrop-blur-md border border-white/20">
-                <Sparkles className="w-3.5 h-3.5" /> OPEN FOR OPPORTUNITIES
-              </div>
-
-              {/* Big Bold Headline from Poster */}
-              <h3 className="text-2xl sm:text-3xl font-cinzel font-black tracking-tight leading-tight uppercase">
-                LET'S BUILD<br />
-                SOMETHING<br />
-                AMAZING<br />
-                TOGETHER. <span className="text-lilac-200">✦</span>
-              </h3>
-
-              <p className="text-xs sm:text-sm text-purple-100/90 leading-relaxed font-normal">
-                I'm actively seeking AI/ML engineering internships, full-stack projects, and innovative technical collaborations.
-              </p>
-            </div>
-
-            {/* Dark Pill CTA Button from Poster */}
-            <div className="relative z-10 pt-6 mt-6 border-t border-white/20">
-              <a
-                href="#contact"
-                className="w-full inline-flex items-center justify-between px-6 py-4 rounded-2xl bg-obsidian-base hover:bg-black text-white font-bold text-xs uppercase tracking-wider shadow-2xl group-hover:scale-[1.02] transition-all"
-              >
-                <span>GET IN TOUCH</span>
-                <div className="w-8 h-8 rounded-xl bg-lilac-500 text-black flex items-center justify-center">
-                  <ArrowUpRight className="w-4 h-4" />
+          <TiltCard3D className="lg:col-span-4 h-full">
+            <div className="glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between h-full shadow-lg hover:shadow-purple-950/40">
+              <div>
+                <div className="flex items-center justify-between mb-6 pb-3 border-b border-lilac-500/15">
+                  <h3 className="font-cinzel text-lg font-bold text-white tracking-wider">
+                    WORK PROCESS
+                  </h3>
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-lilac-500/10 text-lilac-300 border border-lilac-500/20">
+                    4-Phase Pipeline
+                  </span>
                 </div>
-              </a>
-            </div>
 
-          </div>
+                <div className="space-y-4">
+                  {processSteps.map((step) => (
+                    <div
+                      key={step.step}
+                      className="p-3.5 rounded-2xl bg-obsidian-surface/90 border border-lilac-500/15 hover:border-lilac-400/50 transition-all flex items-start gap-3.5 group"
+                    >
+                      <span className="w-7 h-7 rounded-xl bg-lilac-500/15 text-lilac-300 font-mono text-xs font-bold flex items-center justify-center border border-lilac-500/30 shrink-0 group-hover:bg-lilac-500 group-hover:text-black transition-colors">
+                        {step.step}
+                      </span>
+                      <div>
+                        <h4 className="text-xs font-cinzel font-bold text-white tracking-wide group-hover:text-lilac-200 transition-colors">
+                          {step.title}
+                        </h4>
+                        <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed font-normal">
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
+                <span>Systematic Engineering</span>
+                <span className="text-lilac-400">Data to Deployment</span>
+              </div>
+            </div>
+          </TiltCard3D>
+
+          {/* COLUMN 3: PHILOSOPHY & AMBITION (4 cols) */}
+          <TiltCard3D className="lg:col-span-4 h-full">
+            <div className="glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between h-full shadow-lg hover:shadow-purple-950/40">
+              <div className="space-y-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="px-2.5 py-0.5 rounded-full bg-lilac-500/10 border border-lilac-500/20 text-lilac-300 text-[10px] font-mono uppercase tracking-widest">
+                      CORE PHILOSOPHY
+                    </span>
+                  </div>
+                  <h3 className="font-cinzel text-xl font-bold text-white leading-snug">
+                    ENGINEERING INTELLIGENCE WITH PURPOSE
+                  </h3>
+                  <p className="text-xs text-zinc-300 mt-3 leading-relaxed font-normal">
+                    "AI isn't just about training algorithms; it's about solving real human friction. By merging clean Python architectures, deep analytics, and autonomous agentic workflows, I build solutions that deliver measurable value."
+                  </p>
+                </div>
+
+                {/* 3 Core Pillars */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="p-3 rounded-2xl bg-obsidian-surface border border-lilac-500/15 flex items-center justify-between">
+                    <span className="text-xs font-cinzel font-bold text-white">Continuous Innovation</span>
+                    <Sparkles className="w-3.5 h-3.5 text-lilac-400" />
+                  </div>
+                  <div className="p-3 rounded-2xl bg-obsidian-surface border border-lilac-500/15 flex items-center justify-between">
+                    <span className="text-xs font-cinzel font-bold text-white">Clean &amp; Modular Code</span>
+                    <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                  </div>
+                  <div className="p-3 rounded-2xl bg-obsidian-surface border border-lilac-500/15 flex items-center justify-between">
+                    <span className="text-xs font-cinzel font-bold text-white">Data-Driven Precision</span>
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom CTA to Projects */}
+              <div className="mt-6 pt-4 border-t border-lilac-500/15">
+                <a
+                  href="#projects"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 hover:from-lilac-400 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md shadow-purple-950/40"
+                >
+                  <span>Explore Applied AI</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          </TiltCard3D>
 
         </div>
 
