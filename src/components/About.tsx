@@ -2,14 +2,10 @@ import React from 'react';
 import { 
   User, 
   GraduationCap, 
-  Sparkles, 
-  MapPin, 
   CheckCircle2, 
-  Code2, 
-  Cpu,
-  ArrowRight
+  Code2
 } from 'lucide-react';
-import { personalInfo, educationInfo } from '../data/portfolioData';
+import { educationInfo } from '../data/portfolioData';
 import { InstagramGlassCard } from './InstagramGlassCard';
 
 export const About: React.FC = () => {

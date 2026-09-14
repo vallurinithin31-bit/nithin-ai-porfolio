@@ -7,8 +7,7 @@ import {
   MapPin,
   Phone,
   ExternalLink,
-  MessageCircle,
-  ArrowRight
+  MessageCircle
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon } from './Icons';

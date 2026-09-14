@@ -4,10 +4,7 @@ import {
   Bot, 
   BarChart3, 
   Code2, 
-  Layers,
-  Database,
-  Cpu,
-  Sparkles
+  Cpu
 } from 'lucide-react';
 import { TiltCard3D } from './TiltCard3D';
 

@@ -31,7 +31,7 @@ export const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen relative selection:bg-lilac-500/30 selection:text-lilac-200 overflow-x-hidden">
+      <div className="min-h-screen relative selection:bg-red-500/30 selection:text-red-200 overflow-x-hidden">
         
         {/* Top Laser Scroll Progress Indicator */}
         <ScrollProgressBar />
@@ -59,7 +59,11 @@ export const App: React.FC = () => {
             />
           </Section3DWrapper>
 
-          <Section3DWrapper id="what-i-do">
+          <Section3DWrapper id="about">
+            <About />
+          </Section3DWrapper>
+
+          <Section3DWrapper id="skills">
             <WhatIDo />
           </Section3DWrapper>
 
@@ -73,10 +77,6 @@ export const App: React.FC = () => {
 
           <Section3DWrapper id="certificates">
             <Certificates onToast={showToast} />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="about">
-            <About />
           </Section3DWrapper>
 
           <Section3DWrapper id="experience">

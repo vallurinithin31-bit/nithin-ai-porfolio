@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, ArrowRight, FolderGit2 } from 'lucide-react';
+import { ArrowRight, FolderGit2 } from 'lucide-react';
 import { projectsData } from '../data/portfolioData';
 import { ProjectCard } from './ProjectCard';
 

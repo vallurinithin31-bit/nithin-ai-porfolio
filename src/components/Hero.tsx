@@ -3,7 +3,6 @@ import {
   Download, 
   ArrowRight, 
   Mail, 
-  Sparkles, 
   Terminal, 
   Cpu, 
   Bot, 
