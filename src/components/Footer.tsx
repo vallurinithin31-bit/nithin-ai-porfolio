@@ -1,5 +1,5 @@
 import React from 'react';
-import { Terminal, Mail, ArrowUp } from 'lucide-react';
+import { Mail, ArrowUp } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon, InstagramIcon } from './Icons';
 
@@ -13,41 +13,34 @@ export const Footer: React.FC = () => {
 
   const navLinks = [
     { name: 'Home', href: '#home' },
-    { name: 'What I Do', href: '#what-i-do' },
+    { name: 'About', href: '#about' },
+    { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Toolkit & Process', href: '#toolkit-process' },
-    { name: 'Certificates', href: '#certificates' },
-    { name: 'Resume', href: '#resume' },
     { name: 'Contact', href: '#contact' },
   ];
 
   return (
-    <footer className="relative border-t border-lilac-500/20 bg-obsidian-surface/90 backdrop-blur-2xl py-14">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="relative border-t border-white/10 bg-[#0c0d12] py-14 select-none">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           
-          {/* Brand & Highlighted Name */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-1.5">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-lilac-400 via-purple-600 to-indigo-700 text-white flex items-center justify-center font-bold shadow-md shadow-purple-950/50">
-                <Terminal className="w-4 h-4" />
-              </div>
-              <span className="font-cinzel font-black text-xl sm:text-2xl uppercase tracking-wider text-white">
-                {personalInfo.name}
-              </span>
-            </div>
-            <p className="text-xs font-cinzel text-lilac-300/80 tracking-wide">
-              {personalInfo.title}
+          {/* Brand & Title */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-1">
+            <span className="font-black text-xl tracking-tight text-white">
+              {personalInfo.name}
+            </span>
+            <p className="text-xs font-mono text-zinc-400">
+              {personalInfo.title} • Vijayawada, India
             </p>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-cinzel font-medium text-zinc-400 tracking-wider">
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-zinc-400">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="hover:text-lilac-300 transition-colors"
+                className="hover:text-white transition-colors"
               >
                 {link.name}
               </a>
@@ -55,25 +48,25 @@ export const Footer: React.FC = () => {
           </nav>
 
           {/* Social Icons & Back to Top */}
-          <div className="flex items-center gap-3">
-            <a
-              href={personalInfo.socials.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
-            >
-              <LinkedinIcon className="w-4 h-4" />
-            </a>
-
+          <div className="flex items-center gap-2.5">
             <a
               href={personalInfo.socials.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
+              className="p-2.5 rounded-full bg-[#12131a] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all hover:scale-105"
             >
               <GithubIcon className="w-4 h-4" />
+            </a>
+
+            <a
+              href={personalInfo.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="p-2.5 rounded-full bg-[#12131a] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all hover:scale-105"
+            >
+              <LinkedinIcon className="w-4 h-4" />
             </a>
 
             <a
@@ -81,7 +74,7 @@ export const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
+              className="p-2.5 rounded-full bg-[#12131a] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all hover:scale-105"
             >
               <InstagramIcon className="w-4 h-4" />
             </a>
@@ -89,7 +82,7 @@ export const Footer: React.FC = () => {
             <a
               href={`mailto:${personalInfo.socials.email}`}
               aria-label="Email"
-              className="p-2.5 rounded-xl bg-obsidian-surface text-zinc-400 hover:text-white hover:bg-purple-900/60 border border-lilac-500/20 transition-all hover:scale-105"
+              className="p-2.5 rounded-full bg-[#12131a] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10 transition-all hover:scale-105"
             >
               <Mail className="w-4 h-4" />
             </a>
@@ -98,7 +91,7 @@ export const Footer: React.FC = () => {
               onClick={scrollToTop}
               aria-label="Scroll to top"
               title="Back to Top"
-              className="p-2.5 rounded-xl bg-gradient-to-r from-lilac-500 to-purple-600 text-white hover:from-lilac-400 hover:to-purple-500 shadow-md shadow-purple-950/50 transition-all ml-2 hover:scale-105"
+              className="p-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-950/60 transition-all ml-2 hover:scale-105"
             >
               <ArrowUp className="w-4 h-4" />
             </button>
@@ -107,8 +100,8 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Copyright Line */}
-        <div className="mt-10 pt-7 border-t border-lilac-500/15 text-center text-xs font-mono text-zinc-500">
-          <p>© 2026 {personalInfo.name}. All Rights Reserved. Crafted with React, Tailwind CSS &amp; Three.js.</p>
+        <div className="mt-10 pt-6 border-t border-white/5 text-center text-xs font-mono text-zinc-500">
+          <p>© 2026 {personalInfo.name}. All Rights Reserved. Built with React, TypeScript &amp; Tailwind CSS.</p>
         </div>
       </div>
     </footer>

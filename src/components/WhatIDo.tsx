@@ -4,96 +4,123 @@ import {
   Bot, 
   BarChart3, 
   Code2, 
-  ArrowUpRight
+  Layers,
+  Database,
+  Cpu,
+  Sparkles
 } from 'lucide-react';
 import { TiltCard3D } from './TiltCard3D';
 
 export const WhatIDo: React.FC = () => {
-  const services = [
+  const skillCategories = [
     {
-      id: '01',
-      title: 'MACHINE LEARNING',
+      title: 'Machine Learning & AI',
       icon: BrainCircuit,
-      description: 'Developing supervised & unsupervised models, predictive analytics, regression, and end-to-end data preprocessing pipelines.'
+      skills: [
+        { name: 'Python', level: 95 },
+        { name: 'Scikit-Learn & Algorithms', level: 90 },
+        { name: 'Neural Architectures', level: 85 },
+        { name: 'Model Evaluation & Tuning', level: 88 }
+      ]
     },
     {
-      id: '02',
-      title: 'AGENTIC AI & LLMs',
+      title: 'Agentic AI & RAG',
       icon: Bot,
-      description: 'Building intelligent RAG architectures, multi-agent frameworks, healthcare voice assistants, and custom LLM integrations.'
+      skills: [
+        { name: 'RAG Architectures', level: 90 },
+        { name: 'Vector Databases', level: 85 },
+        { name: 'Multi-Agent Workflows', level: 88 },
+        { name: 'LLM Prompt Engineering', level: 92 }
+      ]
     },
     {
-      id: '03',
-      title: 'DATA ANALYTICS',
+      title: 'Data Science & EDA',
       icon: BarChart3,
-      description: 'Extracting actionable insights from 10,000+ record datasets with Pandas, NumPy, statistical modeling, and data visualizations.'
+      skills: [
+        { name: 'Pandas & NumPy', level: 95 },
+        { name: 'Exploratory Data Analysis', level: 92 },
+        { name: 'Matplotlib & Seaborn', level: 88 },
+        { name: 'Statistical Testing', level: 85 }
+      ]
     },
     {
-      id: '04',
-      title: 'FULL-STACK DEV',
+      title: 'Backend & Full-Stack',
       icon: Code2,
-      description: 'Engineering responsive, modern web applications with Python/Django, RESTful APIs, SQLite/MySQL, and modern frontend tools.'
+      skills: [
+        { name: 'Django & REST APIs', level: 85 },
+        { name: 'SQL & Database Design', level: 84 },
+        { name: 'Git & Version Control', level: 90 },
+        { name: 'Modern Responsive UI', level: 86 }
+      ]
     }
   ];
 
   return (
-    <section id="what-i-do" className="py-24 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="py-24 bg-[#0c0d12] relative select-none border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         
-        {/* Section Header & Subtitle */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-14">
-          
-          <div className="lg:col-span-5">
-            <div className="flex items-center gap-2 mb-2">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-cinzel font-black tracking-wider text-white">
-                WHAT I DO
-              </h2>
-              <span className="text-2xl text-lilac-400 font-bold animate-pulse">✦</span>
-            </div>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-lilac-400 to-transparent rounded-full mt-3" />
+        {/* Section Header */}
+        <div className="flex flex-col items-start mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono tracking-widest uppercase mb-3">
+            <Cpu className="w-3.5 h-3.5" />
+            <span>TECHNICAL PROFICIENCY</span>
           </div>
-
-          <div className="lg:col-span-7">
-            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-normal">
-              I analyze, design, and engineer intelligent AI models, autonomous agents, and data-driven software solutions tailored for real-world business challenges and rapid performance.
-            </p>
-          </div>
-
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            Skills &amp; Capabilities
+          </h2>
+          <p className="text-sm sm:text-base text-zinc-400 max-w-2xl mt-3 leading-relaxed">
+            A comprehensive matrix of technical competencies across AI modeling, data analysis, and software engineering.
+          </p>
         </div>
 
-        {/* 4 Numbered Cards Grid with 3D Physics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((item) => {
-            const Icon = item.icon;
+        {/* 4 Category Skill Panels */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {skillCategories.map((cat, idx) => {
+            const Icon = cat.icon;
             return (
-              <TiltCard3D key={item.id} className="h-full">
-                <div className="glass-panel rounded-3xl p-7 flex flex-col justify-between border border-lilac-500/20 ai-glow-card group transition-all duration-300 h-full shadow-lg hover:shadow-purple-950/40">
+              <TiltCard3D key={idx} className="h-full">
+                <div className="p-7 sm:p-8 rounded-3xl bg-[#12131a] border border-white/10 hover:border-red-500/40 transition-all duration-300 h-full flex flex-col justify-between">
                   <div>
-                    {/* Icon & Corner Star */}
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="p-3 rounded-2xl bg-lilac-500/10 text-lilac-300 border border-lilac-500/25 group-hover:scale-110 group-hover:bg-lilac-500 group-hover:text-black transition-all">
+                    {/* Category Title */}
+                    <div className="flex items-center gap-3.5 mb-6">
+                      <div className="p-3 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20 shrink-0">
                         <Icon className="w-5 h-5" />
                       </div>
-                      <ArrowUpRight className="w-4 h-4 text-lilac-400/50 group-hover:text-lilac-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                      <div>
+                        <h3 className="text-lg font-bold text-white tracking-tight">
+                          {cat.title}
+                        </h3>
+                        <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">
+                          Core Competency
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-base font-cinzel font-bold text-white tracking-wider mb-3 group-hover:text-lilac-200 transition-colors">
-                      {item.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-xs text-zinc-400 leading-relaxed font-normal">
-                      {item.description}
-                    </p>
+                    {/* Skill progress bars */}
+                    <div className="space-y-4">
+                      {cat.skills.map((skill) => (
+                        <div key={skill.name} className="space-y-1.5">
+                          <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
+                            <span className="font-medium text-white">{skill.name}</span>
+                            <span className="text-red-400 font-bold">{skill.level}%</span>
+                          </div>
+                          
+                          {/* Progress Track */}
+                          <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-red-600 to-rose-500 rounded-full transition-all duration-1000"
+                              style={{ width: `${skill.level}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Bottom Number ID */}
-                  <div className="pt-6 mt-6 border-t border-lilac-500/15 flex items-center justify-between">
-                    <span className="font-mono text-xs text-lilac-400/80 font-bold tracking-widest">
-                      {item.id}
-                    </span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-lilac-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                  {/* Bottom verification badge */}
+                  <div className="pt-5 mt-5 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-500">
+                    <span>Verified Practical Application</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                   </div>
                 </div>
               </TiltCard3D>

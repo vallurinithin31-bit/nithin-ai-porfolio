@@ -45,21 +45,21 @@ export const BentoGridSection: React.FC = () => {
   ];
 
   return (
-    <section id="toolkit-process" className="py-24 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="toolkit-process" className="py-24 relative select-none">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         
         {/* Bento Grid: 3 Columns with 3D Tilt */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-stretch">
           
           {/* COLUMN 1: MY TOOLKIT (4 cols) */}
           <TiltCard3D className="lg:col-span-4 h-full">
-            <div className="glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between h-full shadow-lg hover:shadow-purple-950/40">
+            <div className="rounded-3xl p-7 bg-[#12131a] border border-white/10 flex flex-col justify-between h-full shadow-lg hover:border-red-500/40 transition-colors">
               <div>
-                <div className="flex items-center justify-between mb-5 pb-3 border-b border-lilac-500/15">
-                  <h3 className="font-cinzel text-lg font-bold text-white tracking-wider">
+                <div className="flex items-center justify-between mb-5 pb-3 border-b border-white/10">
+                  <h3 className="text-lg font-bold text-white tracking-tight">
                     MY TOOLKIT
                   </h3>
-                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-lilac-500/10 text-lilac-300 border border-lilac-500/20">
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
                     12 Technologies
                   </span>
                 </div>
@@ -68,16 +68,16 @@ export const BentoGridSection: React.FC = () => {
                   {toolkit.map((tool) => (
                     <div
                       key={tool.name}
-                      className="p-3 rounded-2xl bg-obsidian-surface/90 border border-lilac-500/15 hover:border-lilac-400/50 transition-all flex flex-col justify-between group"
+                      className="p-3 rounded-2xl bg-[#0c0d12] border border-white/10 hover:border-red-500/40 transition-all flex flex-col justify-between group"
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="w-6 h-6 rounded-lg bg-lilac-500/15 text-lilac-300 text-[10px] font-mono font-bold flex items-center justify-center border border-lilac-500/25 group-hover:bg-lilac-500 group-hover:text-black transition-colors">
+                        <span className="w-6 h-6 rounded-lg bg-red-500/15 text-red-400 text-[10px] font-mono font-bold flex items-center justify-center border border-red-500/25 group-hover:bg-red-600 group-hover:text-white transition-colors">
                           {tool.tag}
                         </span>
-                        <span className="w-1 h-1 rounded-full bg-lilac-400 opacity-40 group-hover:opacity-100" />
+                        <span className="w-1 h-1 rounded-full bg-red-500 opacity-40 group-hover:opacity-100" />
                       </div>
                       <div>
-                        <h4 className="text-xs font-semibold text-white group-hover:text-lilac-200 transition-colors">
+                        <h4 className="text-xs font-semibold text-white group-hover:text-red-400 transition-colors">
                           {tool.name}
                         </h4>
                         <p className="text-[10px] font-mono text-zinc-500 truncate">
@@ -89,22 +89,22 @@ export const BentoGridSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-white/10 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
                 <span>Modern AI &amp; Web Stack</span>
-                <span className="text-lilac-400">Ready for scale</span>
+                <span className="text-red-400">Ready for scale</span>
               </div>
             </div>
           </TiltCard3D>
 
           {/* COLUMN 2: WORK PROCESS (4 cols) */}
           <TiltCard3D className="lg:col-span-4 h-full">
-            <div className="glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between h-full shadow-lg hover:shadow-purple-950/40">
+            <div className="rounded-3xl p-7 bg-[#12131a] border border-white/10 flex flex-col justify-between h-full shadow-lg hover:border-red-500/40 transition-colors">
               <div>
-                <div className="flex items-center justify-between mb-6 pb-3 border-b border-lilac-500/15">
-                  <h3 className="font-cinzel text-lg font-bold text-white tracking-wider">
+                <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/10">
+                  <h3 className="text-lg font-bold text-white tracking-tight">
                     WORK PROCESS
                   </h3>
-                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-lilac-500/10 text-lilac-300 border border-lilac-500/20">
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
                     4-Phase Pipeline
                   </span>
                 </div>
@@ -113,13 +113,13 @@ export const BentoGridSection: React.FC = () => {
                   {processSteps.map((step) => (
                     <div
                       key={step.step}
-                      className="p-3.5 rounded-2xl bg-obsidian-surface/90 border border-lilac-500/15 hover:border-lilac-400/50 transition-all flex items-start gap-3.5 group"
+                      className="p-3.5 rounded-2xl bg-[#0c0d12] border border-white/10 hover:border-red-500/40 transition-all flex items-start gap-3.5 group"
                     >
-                      <span className="w-7 h-7 rounded-xl bg-lilac-500/15 text-lilac-300 font-mono text-xs font-bold flex items-center justify-center border border-lilac-500/30 shrink-0 group-hover:bg-lilac-500 group-hover:text-black transition-colors">
+                      <span className="w-7 h-7 rounded-xl bg-red-500/15 text-red-400 font-mono text-xs font-bold flex items-center justify-center border border-red-500/30 shrink-0 group-hover:bg-red-600 group-hover:text-white transition-colors">
                         {step.step}
                       </span>
                       <div>
-                        <h4 className="text-xs font-cinzel font-bold text-white tracking-wide group-hover:text-lilac-200 transition-colors">
+                        <h4 className="text-xs font-bold text-white tracking-tight group-hover:text-red-400 transition-colors font-mono">
                           {step.title}
                         </h4>
                         <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed font-normal">
@@ -131,24 +131,24 @@ export const BentoGridSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-lilac-500/15 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
+              <div className="mt-5 pt-3 border-t border-white/10 text-[11px] font-mono text-zinc-500 flex items-center justify-between">
                 <span>Systematic Engineering</span>
-                <span className="text-lilac-400">Data to Deployment</span>
+                <span className="text-red-400">Data to Deployment</span>
               </div>
             </div>
           </TiltCard3D>
 
           {/* COLUMN 3: PHILOSOPHY & AMBITION (4 cols) */}
           <TiltCard3D className="lg:col-span-4 h-full">
-            <div className="glass-panel rounded-3xl p-7 border border-lilac-500/20 ai-glow-card flex flex-col justify-between h-full shadow-lg hover:shadow-purple-950/40">
+            <div className="rounded-3xl p-7 bg-[#12131a] border border-white/10 flex flex-col justify-between h-full shadow-lg hover:border-red-500/40 transition-colors">
               <div className="space-y-6">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full bg-lilac-500/10 border border-lilac-500/20 text-lilac-300 text-[10px] font-mono uppercase tracking-widest">
+                    <span className="px-2.5 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-mono uppercase tracking-widest">
                       CORE PHILOSOPHY
                     </span>
                   </div>
-                  <h3 className="font-cinzel text-xl font-bold text-white leading-snug">
+                  <h3 className="text-xl font-bold text-white leading-snug tracking-tight">
                     ENGINEERING INTELLIGENCE WITH PURPOSE
                   </h3>
                   <p className="text-xs text-zinc-300 mt-3 leading-relaxed font-normal">
@@ -158,26 +158,26 @@ export const BentoGridSection: React.FC = () => {
 
                 {/* 3 Core Pillars */}
                 <div className="space-y-2.5 pt-2">
-                  <div className="p-3 rounded-2xl bg-obsidian-surface border border-lilac-500/15 flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-bold text-white">Continuous Innovation</span>
-                    <Sparkles className="w-3.5 h-3.5 text-lilac-400" />
+                  <div className="p-3 rounded-2xl bg-[#0c0d12] border border-white/10 flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Continuous Innovation</span>
+                    <Sparkles className="w-3.5 h-3.5 text-red-400" />
                   </div>
-                  <div className="p-3 rounded-2xl bg-obsidian-surface border border-lilac-500/15 flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-bold text-white">Clean &amp; Modular Code</span>
-                    <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                  <div className="p-3 rounded-2xl bg-[#0c0d12] border border-white/10 flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Clean &amp; Modular Code</span>
+                    <Sparkles className="w-3.5 h-3.5 text-red-400" />
                   </div>
-                  <div className="p-3 rounded-2xl bg-obsidian-surface border border-lilac-500/15 flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-bold text-white">Data-Driven Precision</span>
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <div className="p-3 rounded-2xl bg-[#0c0d12] border border-white/10 flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Data-Driven Precision</span>
+                    <Sparkles className="w-3.5 h-3.5 text-red-400" />
                   </div>
                 </div>
               </div>
 
               {/* Bottom CTA to Projects */}
-              <div className="mt-6 pt-4 border-t border-lilac-500/15">
+              <div className="mt-6 pt-4 border-t border-white/10">
                 <a
                   href="#projects"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-lilac-500 via-purple-600 to-indigo-600 hover:from-lilac-400 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md shadow-purple-950/40"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md shadow-red-950/60"
                 >
                   <span>Explore Applied AI</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />

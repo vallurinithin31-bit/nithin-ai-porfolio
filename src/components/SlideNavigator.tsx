@@ -5,15 +5,10 @@ export const SlideNavigator: React.FC = () => {
 
   const slides = [
     { id: 'home', label: '01 Home' },
-    { id: 'what-i-do', label: '02 What I Do' },
-    { id: 'projects', label: '03 Projects' },
-    { id: 'toolkit-process', label: '04 Toolkit' },
-    { id: 'certificates', label: '05 Certs' },
-    { id: 'about', label: '06 About' },
-    { id: 'experience', label: '07 Experience' },
-    { id: 'achievements', label: '08 Honors' },
-    { id: 'resume', label: '09 Resume' },
-    { id: 'contact', label: '10 Contact' }
+    { id: 'about', label: '02 About' },
+    { id: 'skills', label: '03 Skills' },
+    { id: 'projects', label: '04 Projects' },
+    { id: 'contact', label: '05 Contact' }
   ];
 
   useEffect(() => {
@@ -53,7 +48,7 @@ export const SlideNavigator: React.FC = () => {
 
   return (
     <div className="fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-end gap-2.5 pointer-events-auto select-none">
-      <div className="p-2 rounded-full bg-obsidian-surface/80 border border-lilac-500/20 backdrop-blur-xl shadow-2xl flex flex-col items-center gap-2">
+      <div className="p-2 rounded-full bg-[#12131a]/80 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col items-center gap-2">
         {slides.map((slide, index) => {
           const isActive = activeSlide === index;
           return (
@@ -65,7 +60,7 @@ export const SlideNavigator: React.FC = () => {
               aria-label={`Slide ${slide.label}`}
             >
               {/* Tooltip on hover */}
-              <span className="absolute right-7 px-2.5 py-1 rounded-lg bg-obsidian-surface border border-lilac-500/30 text-[10px] font-mono text-lilac-200 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg">
+              <span className="absolute right-7 px-2.5 py-1 rounded-lg bg-[#0c0d12] border border-white/10 text-[10px] font-mono text-zinc-300 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg">
                 {slide.label}
               </span>
 
@@ -73,8 +68,8 @@ export const SlideNavigator: React.FC = () => {
               <div
                 className={`transition-all duration-300 rounded-full ${
                   isActive
-                    ? 'w-2.5 h-6 bg-gradient-to-b from-lilac-400 to-purple-600 shadow-[0_0_10px_#c084fc]'
-                    : 'w-2 h-2 bg-zinc-600 hover:bg-lilac-400/60'
+                    ? 'w-2.5 h-6 bg-gradient-to-b from-red-500 to-red-700 shadow-[0_0_10px_#dc2626]'
+                    : 'w-2 h-2 bg-zinc-600 hover:bg-red-400/60'
                 }`}
               />
             </button>

@@ -12,51 +12,126 @@
   
   body {
     @apply antialiased overflow-x-hidden;
-    background-color: #09090e;
-    color: #f3e8ff;
-  }
-
-  body.light, .light body {
-    background-color: #f8f6fc;
-    color: #0e0d16;
+    background-color: #0c0d12;
+    color: #ffffff;
   }
 
   h1, h2, h3 {
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Custom glowing purple scrollbar */
+/* Custom glowing Crimson scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #09090e;
-}
-
-.light ::-webkit-scrollbar-track {
-  background: #f3e8ff;
+  background: #0c0d12;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #7e22ce;
+  background: #dc2626;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a855f7;
+  background: #ef4444;
 }
 
-/* Glassmorphism utilities - Luxury Obsidian & Royal Lilac */
+/* Vibrant Crimson Hero Stage */
+.hero-crimson-stage {
+  background: radial-gradient(circle at 50% 30%, #ef2d2d 0%, #dc2626 45%, #991b1b 75%, #450a0a 100%);
+  position: relative;
+}
+
+/* Pill Button System (inspired by Instagram reference) */
+.btn-pill-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #09090b;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn-pill-white:hover {
+  background-color: #f4f4f5;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+}
+
+.btn-pill-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn-pill-glass:hover {
+  background-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-pill-crimson {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.4);
+  transition: all 0.25s ease;
+}
+
+.btn-pill-crimson:hover {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px -5px rgba(220, 38, 38, 0.6);
+}
+
+/* Glassmorphism utilities - Dark Crimson & Obsidian */
 .glass-panel {
-  background: rgba(14, 13, 22, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(168, 85, 247, 0.16);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
-  transform-style: preserve-3d;
-  perspective: 1000px;
+  background: rgba(18, 19, 26, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.7);
+}
+
+.card-crimson {
+  background: rgba(22, 23, 31, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-crimson:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(220, 38, 38, 0.25);
 }
 
 .light .glass-panel {

@@ -30,25 +30,17 @@ export const ThreeBackground: React.FC = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // --- Royal Violet & Lilac Palette ---
-    const isDark = theme === 'dark';
-    const themeColors = isDark
-      ? [
-          new THREE.Color('#c084fc'), // Electric Lilac
-          new THREE.Color('#a855f7'), // Royal Violet
-          new THREE.Color('#e9d5ff'), // Soft Lavender
-          new THREE.Color('#818cf8'), // Indigo Purple
-          new THREE.Color('#ffffff')  // Pure White Sparkle
-        ]
-      : [
-          new THREE.Color('#7e22ce'), // Deep Purple
-          new THREE.Color('#9333ea'), // Vivid Violet
-          new THREE.Color('#a855f7'), // Bright Lilac
-          new THREE.Color('#3b82f6')  // Accent Blue
-        ];
+    // --- Crimson & Obsidian Palette ---
+    const themeColors = [
+      new THREE.Color('#ef4444'), // Crimson Red
+      new THREE.Color('#dc2626'), // Deep Red
+      new THREE.Color('#f87171'), // Light Coral
+      new THREE.Color('#ffffff'), // Sparkle White
+      new THREE.Color('#fda4af')  // Rose Accent
+    ];
 
     // --- 1. 3D Neural Nodes ---
-    const particleCount = window.innerWidth < 768 ? 100 : 200;
+    const particleCount = window.innerWidth < 768 ? 90 : 160;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -69,9 +61,9 @@ export const ThreeBackground: React.FC = () => {
       colors[i * 3 + 2] = randomColor.b;
 
       velocities.push({
-        x: (Math.random() - 0.5) * 0.07,
-        y: (Math.random() - 0.5) * 0.07,
-        z: (Math.random() - 0.5) * 0.04
+        x: (Math.random() - 0.5) * 0.05,
+        y: (Math.random() - 0.5) * 0.05,
+        z: (Math.random() - 0.5) * 0.03
       });
     }
 
@@ -87,8 +79,8 @@ export const ThreeBackground: React.FC = () => {
       if (ctx) {
         const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
         gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(0.3, 'rgba(216, 180, 254, 0.9)');
-        gradient.addColorStop(0.65, 'rgba(168, 85, 247, 0.4)');
+        gradient.addColorStop(0.3, 'rgba(248, 113, 113, 0.9)');
+        gradient.addColorStop(0.65, 'rgba(220, 38, 38, 0.4)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 64, 64);
@@ -97,20 +89,20 @@ export const ThreeBackground: React.FC = () => {
     };
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: 4.6,
+      size: 4.2,
       map: createCircleTexture(),
       transparent: true,
-      opacity: isDark ? 0.90 : 0.70,
+      opacity: 0.85,
       vertexColors: true,
-      blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
+      blending: THREE.AdditiveBlending,
       depthWrite: false
     });
 
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
-    // --- 2. Dynamic 3D Royal Violet Neural Synapses ---
-    const maxConnections = particleCount * 6;
+    // --- 2. Dynamic 3D Crimson Neural Synapses ---
+    const maxConnections = particleCount * 5;
     const linePositions = new Float32Array(maxConnections * 6);
     const lineColors = new Float32Array(maxConnections * 6);
 
@@ -121,8 +113,8 @@ export const ThreeBackground: React.FC = () => {
     const lineMaterial = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: isDark ? 0.45 : 0.25,
-      blending: isDark ? THREE.AdditiveBlending : THREE.NormalBlending,
+      opacity: 0.35,
+      blending: THREE.AdditiveBlending,
       depthWrite: false
     });
 
@@ -132,38 +124,38 @@ export const ThreeBackground: React.FC = () => {
     // --- 3. 3D Floating Geometric AI Crystals ---
     const geomGroup = new THREE.Group();
 
-    // Geometric Cluster 1: Icosahedron in Lilac Wireframe
+    // Geometric Cluster 1: Icosahedron in Crimson Wireframe
     const icoGeo = new THREE.IcosahedronGeometry(7, 1);
     const icoMat = new THREE.MeshBasicMaterial({
-      color: isDark ? 0xc084fc : 0x7e22ce,
+      color: 0xef4444,
       wireframe: true,
       transparent: true,
-      opacity: isDark ? 0.30 : 0.15
+      opacity: 0.25
     });
     const icosahedron = new THREE.Mesh(icoGeo, icoMat);
     icosahedron.position.set(38, 15, -20);
     geomGroup.add(icosahedron);
 
-    // Geometric Cluster 2: Torus Ring in Royal Violet
+    // Geometric Cluster 2: Torus Ring in Deep Red
     const torusGeo = new THREE.TorusGeometry(12, 0.35, 16, 64);
     const torusMat = new THREE.MeshBasicMaterial({
-      color: isDark ? 0xa855f7 : 0x9333ea,
+      color: 0xdc2626,
       wireframe: true,
       transparent: true,
-      opacity: isDark ? 0.25 : 0.12
+      opacity: 0.20
     });
     const torus = new THREE.Mesh(torusGeo, torusMat);
     torus.position.set(-42, -18, -15);
     torus.rotation.x = Math.PI / 3;
     geomGroup.add(torus);
 
-    // Geometric Cluster 3: Octahedron in Soft Lavender
+    // Geometric Cluster 3: Octahedron in Coral/White
     const octGeo = new THREE.OctahedronGeometry(5, 0);
     const octMat = new THREE.MeshBasicMaterial({
-      color: isDark ? 0xd8b4fe : 0x6b21a8,
+      color: 0xf87171,
       wireframe: true,
       transparent: true,
-      opacity: isDark ? 0.28 : 0.15
+      opacity: 0.22
     });
     const octahedron = new THREE.Mesh(octGeo, octMat);
     octahedron.position.set(45, -28, -10);
@@ -179,10 +171,10 @@ export const ThreeBackground: React.FC = () => {
 
     const surfaceGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight, widthSegments, heightSegments);
     const surfaceMaterial = new THREE.MeshBasicMaterial({
-      color: isDark ? 0x9333ea : 0x7e22ce,
+      color: 0xdc2626,
       wireframe: true,
       transparent: true,
-      opacity: isDark ? 0.15 : 0.08
+      opacity: 0.12
     });
 
     const waveSurface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);

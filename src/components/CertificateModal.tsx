@@ -96,20 +96,20 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-obsidian-surface border border-lilac-500/30 shadow-2xl p-6 sm:p-9 flex flex-col justify-between text-left"
+        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#12131a] border border-white/10 shadow-2xl p-6 sm:p-9 flex flex-col justify-between text-left"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Controls */}
-        <div className="flex items-center justify-between pb-4 mb-5 border-b border-lilac-500/20">
+        <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-lilac-500/15 text-lilac-300 border border-lilac-500/30">
+            <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-lilac-400">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-red-400">
                 Verified Credential ({currentIndex + 1} of {certificatesList.length})
               </span>
-              <h2 id="cert-modal-title" className="text-lg sm:text-xl font-cinzel font-bold text-white tracking-wide">
+              <h2 id="cert-modal-title" className="text-lg sm:text-xl font-bold text-white tracking-tight">
                 {certificate.title}
               </h2>
             </div>
@@ -118,7 +118,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Close certificate lightbox modal"
-            className="p-2 rounded-xl bg-obsidian-base hover:bg-lilac-500 hover:text-black text-zinc-400 border border-lilac-500/25 transition-all"
+            className="p-2 rounded-xl bg-[#0c0d12] hover:bg-red-600 hover:text-white text-zinc-400 border border-white/10 transition-all"
           >
             <X className="w-5 h-5" />
           </button>
@@ -128,7 +128,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto">
           
           {/* Certificate Image Frame */}
-          <div className="lg:col-span-7 relative rounded-2xl overflow-hidden bg-obsidian-base border border-lilac-500/25 aspect-[4/3] flex items-center justify-center shadow-inner">
+          <div className="lg:col-span-7 relative rounded-2xl overflow-hidden bg-[#0c0d12] border border-white/10 aspect-[4/3] flex items-center justify-center shadow-inner">
             {isRealImage ? (
               <img
                 src={certificate.image}
@@ -138,10 +138,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               />
             ) : (
               <div className="p-8 text-center flex flex-col items-center">
-                <div className="w-16 h-16 rounded-2xl bg-lilac-500/15 text-lilac-300 flex items-center justify-center mb-3">
+                <div className="w-16 h-16 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center mb-3">
                   <Award className="w-8 h-8" />
                 </div>
-                <h3 className="text-base font-cinzel font-bold text-white mb-1">
+                <h3 className="text-base font-bold text-white mb-1">
                   {certificate.title}
                 </h3>
                 <p className="text-xs font-mono text-zinc-400">
@@ -154,40 +154,40 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           {/* Metadata & Skill Breakdown */}
           <div className="lg:col-span-5 space-y-5">
             <div>
-              <span className="px-3 py-0.5 rounded-full text-xs font-mono bg-lilac-500/15 text-lilac-300 border border-lilac-500/30">
+              <span className="px-3 py-0.5 rounded-full text-xs font-mono bg-red-500/10 text-red-400 border border-red-500/20">
                 {certificate.category}
               </span>
 
-              <h3 className="text-xl font-cinzel font-bold text-white mt-3 mb-1 tracking-wide">
+              <h3 className="text-xl font-bold text-white mt-3 mb-1 tracking-tight">
                 {certificate.title}
               </h3>
 
               <p className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
-                <Building className="w-4 h-4 text-lilac-400" />
+                <Building className="w-4 h-4 text-red-400" />
                 <span>{certificate.issuer}</span>
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-obsidian-base border border-lilac-500/15">
+              <div className="p-3 rounded-xl bg-[#0c0d12] border border-white/10">
                 <span className="text-zinc-500 block text-[10px]">ISSUED DATE</span>
                 <span className="text-zinc-200 flex items-center gap-1 mt-0.5">
-                  <Calendar className="w-3.5 h-3.5 text-lilac-400" /> {certificate.date}
+                  <Calendar className="w-3.5 h-3.5 text-red-400" /> {certificate.date}
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-obsidian-base border border-lilac-500/15">
+              <div className="p-3 rounded-xl bg-[#0c0d12] border border-white/10">
                 <span className="text-zinc-500 block text-[10px]">VERIFICATION</span>
-                <span className="text-lilac-300 flex items-center gap-1 mt-0.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-lilac-400" /> Authentic
+                <span className="text-red-400 flex items-center gap-1 mt-0.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-red-400" /> Authentic
                 </span>
               </div>
             </div>
 
             {certificate.credentialId && (
-              <div className="p-3 rounded-xl bg-obsidian-base border border-lilac-500/15 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-[#0c0d12] border border-white/10 text-xs font-mono">
                 <span className="text-zinc-500 block text-[10px]">CREDENTIAL ID</span>
-                <code className="text-lilac-300 break-all">{certificate.credentialId}</code>
+                <code className="text-red-400 break-all">{certificate.credentialId}</code>
               </div>
             )}
 
@@ -196,14 +196,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             </p>
 
             <div>
-              <span className="text-[10px] font-cinzel font-bold uppercase tracking-widest text-zinc-400 block mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-2 font-mono">
                 Demonstrated Competencies:
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {certificate.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-2.5 py-1 rounded-lg bg-lilac-950/40 border border-lilac-500/20 text-xs font-mono text-lilac-200"
+                    className="px-2.5 py-1 rounded-lg bg-red-950/30 border border-red-500/20 text-xs font-mono text-red-300"
                   >
                     {skill}
                   </span>
@@ -215,7 +215,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             <div className="flex flex-wrap gap-3 pt-2">
               <button
                 onClick={handleDownload}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-lilac-500 to-purple-600 hover:from-lilac-400 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-950/50 transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-950/50 transition-all"
               >
                 <Download className="w-4 h-4" />
                 <span>Download File</span>
@@ -226,7 +226,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   href={certificate.credentialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-obsidian-base hover:bg-lilac-950/40 text-lilac-300 border border-lilac-500/30 text-xs font-semibold uppercase tracking-wider transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0c0d12] hover:bg-white/10 text-zinc-200 border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all"
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span>Verify Credential</span>
@@ -239,25 +239,25 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         </div>
 
         {/* Modal Pagination Footer */}
-        <div className="flex items-center justify-between pt-5 mt-6 border-t border-lilac-500/20 text-xs font-mono text-zinc-400">
+        <div className="flex items-center justify-between pt-5 mt-6 border-t border-white/10 text-xs font-mono text-zinc-400">
           <button
             onClick={handlePrev}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-obsidian-base hover:bg-lilac-950/40 border border-lilac-500/20 text-zinc-300 hover:text-white transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0c0d12] hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white transition-all"
           >
-            <ChevronLeft className="w-4 h-4 text-lilac-400" />
+            <ChevronLeft className="w-4 h-4 text-red-400" />
             <span>Previous</span>
           </button>
 
           <span className="text-zinc-500 hidden sm:inline">
-            Use keyboard <kbd className="px-1.5 py-0.5 rounded bg-obsidian-base border border-lilac-500/20 text-zinc-300">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-obsidian-base border border-lilac-500/20 text-zinc-300">→</kbd> to navigate
+            Use keyboard <kbd className="px-1.5 py-0.5 rounded bg-[#0c0d12] border border-white/10 text-zinc-300">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-[#0c0d12] border border-white/10 text-zinc-300">→</kbd> to navigate
           </span>
 
           <button
             onClick={handleNext}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-obsidian-base hover:bg-lilac-950/40 border border-lilac-500/20 text-zinc-300 hover:text-white transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0c0d12] hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white transition-all"
           >
             <span>Next</span>
-            <ChevronRight className="w-4 h-4 text-lilac-400" />
+            <ChevronRight className="w-4 h-4 text-red-400" />
           </button>
         </div>
 

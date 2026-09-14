@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, Sparkles, Terminal } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 export const Navbar: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
 
   const navItems = [
     { name: 'Home', href: '#home' },
-    { name: 'What I Do', href: '#what-i-do' },
+    { name: 'About', href: '#about' },
+    { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Toolkit & Process', href: '#toolkit-process' },
-    { name: 'Certificates', href: '#certificates' },
-    { name: 'Resume', href: '#resume' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -23,8 +19,8 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      const sections = navItems.map(item => item.href.substring(1));
-      const scrollPosition = window.scrollY + 120;
+      const sections = ['home', 'about', 'skills', 'projects', 'contact'];
+      const scrollPosition = window.scrollY + 140;
 
       for (const sectionId of [...sections].reverse()) {
         const element = document.getElementById(sectionId);
@@ -44,7 +40,7 @@ export const Navbar: React.FC = () => {
     const targetId = href.substring(1);
     const element = document.getElementById(targetId);
     if (element) {
-      const navOffset = 80;
+      const navOffset = 70;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - navOffset;
 
@@ -58,102 +54,100 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? 'glass-nav py-3.5 shadow-2xl' : 'bg-transparent py-5'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-[#0c0d12]/90 backdrop-blur-xl border-b border-white/10 py-3.5 shadow-2xl' 
+        : 'bg-transparent py-5'
+    }`}>
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between">
           
-          {/* Brand Logo with Modern Editorial Name Typography */}
+          {/* Left: Brand Name */}
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-lilac-400 via-purple-600 to-indigo-800 flex items-center justify-center text-white font-mono font-bold shadow-lg shadow-purple-900/40 group-hover:scale-105 transition-transform border border-lilac-300/30">
-              <Terminal className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-cinzel text-base sm:text-lg font-black tracking-wider uppercase text-white group-hover:text-lilac-300 transition-colors drop-shadow-[0_0_12px_rgba(192,132,252,0.4)]">
-                {personalInfo.name}
-              </span>
-              <span className="text-[10px] font-mono tracking-widest text-lilac-400/90 uppercase flex items-center gap-1">
-                <Sparkles className="w-2.5 h-2.5 inline text-lilac-400" /> AI &amp; ML Specialist
-              </span>
-            </div>
+            <span className="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-red-400 transition-colors">
+              {personalInfo.name}
+            </span>
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 bg-obsidian-surface/90 p-1.5 rounded-full border border-lilac-500/20 backdrop-blur-xl shadow-inner">
+          {/* Center: Desktop Navigation Bar */}
+          <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-white/80">
             {navItems.map((item) => {
-              const isActive = activeSection === item.href.substring(1);
+              const targetId = item.href.substring(1);
+              const isActive = activeSection === targetId;
               return (
                 <a
                   key={item.name}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-lilac-500 to-purple-600 text-white shadow-lg shadow-purple-900/50 font-bold'
-                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  className={`transition-colors relative py-1 hover:text-white ${
+                    isActive ? 'text-white font-semibold' : 'text-white/70'
                   }`}
                 >
                   {item.name}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-white rounded-full" />
+                  )}
                 </a>
               );
             })}
           </nav>
 
-          {/* Right Actions: Theme Toggle & Mobile Menu */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl border border-lilac-500/20 bg-obsidian-surface text-zinc-300 hover:bg-lilac-500/10 hover:text-lilac-300 transition-all hover:scale-105"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          {/* Right: Frosted Pill 'Hire Me' Button */}
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-semibold tracking-wide backdrop-blur-md transition-all hover:scale-105 flex items-center gap-1.5"
             >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-lilac-300" />
-              ) : (
-                <Moon className="w-4 h-4 text-purple-900" />
-              )}
-            </button>
+              <span>Hire Me</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
 
-            {/* Mobile Hamburger Button */}
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2.5 rounded-xl border border-lilac-500/20 bg-obsidian-surface text-zinc-300 hover:bg-lilac-500/10 hover:text-lilac-300 transition-colors"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
+              className="p-2 rounded-full bg-white/10 border border-white/20 text-white"
+              aria-label="Toggle navigation menu"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
-        </div>
-      </div>
 
-      {/* Mobile Navigation Drawer */}
-      {isOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[73px] glass-nav border-b border-lilac-500/20 px-6 py-6 shadow-2xl backdrop-blur-2xl transition-all">
-          <div className="flex flex-col gap-2">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.href.substring(1);
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium tracking-wide transition-all ${
-                    isActive
-                      ? 'bg-gradient-to-r from-lilac-500 to-purple-600 text-white font-bold shadow-md'
-                      : 'text-zinc-300 hover:bg-white/10'
-                  }`}
-                >
-                  {item.name}
-                </a>
-              );
-            })}
-          </div>
         </div>
-      )}
+
+        {/* Mobile Navigation Drawer */}
+        {isOpen && (
+          <div className="md:hidden mt-3 pt-4 border-t border-white/10 bg-[#0c0d12]/95 backdrop-blur-2xl rounded-2xl p-5 space-y-3 shadow-2xl">
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+                className="block text-sm font-medium text-white/80 hover:text-white py-1.5"
+              >
+                {item.name}
+              </a>
+            ))}
+            
+            <div className="pt-3 border-t border-white/10">
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, '#contact')}
+                className="block w-full py-2.5 rounded-full bg-white text-zinc-950 font-bold text-center text-xs tracking-wide shadow-lg"
+              >
+                Hire Me
+              </a>
+            </div>
+          </div>
+        )}
+
+      </div>
     </header>
   );
 };

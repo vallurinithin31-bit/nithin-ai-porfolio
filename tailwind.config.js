@@ -8,23 +8,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        lilac: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7e22ce',
-          800: '#6b21a8',
-          900: '#581c87',
+        crimson: {
+          50: '#fff1f1',
+          100: '#ffe1e1',
+          200: '#ffc7c7',
+          300: '#ffa1a1',
+          400: '#ff6b6b',
+          500: '#e52e2e',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          950: '#450a0a',
         },
         obsidian: {
-          base: '#09090e',
-          surface: '#0e0d16',
-          card: 'rgba(18, 16, 28, 0.75)',
-          border: 'rgba(168, 85, 247, 0.18)',
+          base: '#0c0d12',
+          surface: '#12131a',
+          card: 'rgba(22, 23, 31, 0.85)',
+          border: 'rgba(255, 255, 255, 0.12)',
         }
       },
       fontFamily: {
