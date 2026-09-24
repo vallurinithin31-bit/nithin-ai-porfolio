@@ -6,9 +6,7 @@ import {
   BarChart3, 
   Terminal, 
   Search, 
-  Info,
-  Sparkles,
-  Zap,
+  Info, 
   CheckCircle2
 } from 'lucide-react';
 import { skillCategories } from '../data/portfolioData';

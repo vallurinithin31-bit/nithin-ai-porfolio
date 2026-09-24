@@ -10,8 +10,6 @@ import {
   Mail, 
   MapPin, 
   Sparkles,
-  ArrowRight,
-  ShieldCheck,
   CheckCircle2
 } from 'lucide-react';
 import { personalInfo, educationData, experienceData } from '../data/portfolioData';

@@ -4,14 +4,13 @@ import {
   Download, 
   Printer, 
   Copy, 
-  MapPin,
-  Mail,
-  Phone,
-  Briefcase,
-  GraduationCap,
-  Award,
-  Layers,
-  Sparkles
+  MapPin, 
+  Mail, 
+  Phone, 
+  Briefcase, 
+  GraduationCap, 
+  Award, 
+  Layers
 } from 'lucide-react';
 import { personalInfo, educationData, projectsData, experienceData, certificationsData } from '../data/portfolioData';
 import { LinkedinIcon, GithubIcon } from './Icons';

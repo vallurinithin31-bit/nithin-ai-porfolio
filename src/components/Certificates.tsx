@@ -101,11 +101,11 @@ export const Certificates: React.FC<CertificatesProps> = ({ onToast }) => {
         {/* Certificates Grid */}
         {filteredCertificates.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCertificates.map((cert) => (
+            {filteredCertificates.map((cert: Certificate) => (
               <CertificateCard
                 key={cert.id}
                 certificate={cert}
-                onOpenModal={(c) => setActiveModalCert(c)}
+                onOpenModal={(c: Certificate) => setActiveModalCert(c)}
                 onToast={onToast}
               />
             ))}
