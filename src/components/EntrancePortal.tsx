@@ -4,10 +4,9 @@ import {
   Volume2, 
   VolumeX, 
   ArrowRight,
-  BrainCircuit,
   Loader2,
-  Zap,
-  FileCode
+  Sparkles,
+  Zap
 } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
@@ -19,7 +18,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   const [progress, setProgress] = useState(0);
   const [isOpeningAnimation, setIsOpeningAnimation] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [isHoveredFolder, setIsHoveredFolder] = useState(false);
+  const [isHoveredImage, setIsHoveredImage] = useState(false);
 
   const threeCanvasRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -42,10 +41,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     // 1. Subtle 3D Geometric Floating Gyroscope
     const torusGeo = new THREE.TorusKnotGeometry(9, 2.2, 80, 16);
     const torusMat = new THREE.MeshBasicMaterial({
-      color: 0xc084fc,
+      color: 0x84cc16, // Lime green glow matching entry artwork
       wireframe: true,
       transparent: true,
-      opacity: 0.22
+      opacity: 0.18
     });
     const torusKnot = new THREE.Mesh(torusGeo, torusMat);
     scene.add(torusKnot);
@@ -57,10 +56,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     const colors = new Float32Array(starCount * 3);
 
     const colorPalette = [
-      new THREE.Color('#c084fc'),
-      new THREE.Color('#a855f7'),
-      new THREE.Color('#fbbf24'),
-      new THREE.Color('#ffffff')
+      new THREE.Color('#84cc16'), // Lime
+      new THREE.Color('#a3e635'), // Light lime
+      new THREE.Color('#38bdf8'), // Electric cyan
+      new THREE.Color('#ffffff')  // White star
     ];
 
     for (let i = 0; i < starCount; i++) {
@@ -117,8 +116,8 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
       camera.position.y += (mouseY * 4 - camera.position.y) * 0.05;
       camera.lookAt(0, 0, 0);
 
-      torusKnot.rotation.x = elapsed * 0.20;
-      torusKnot.rotation.y = elapsed * 0.28;
+      torusKnot.rotation.x = elapsed * 0.18;
+      torusKnot.rotation.y = elapsed * 0.24;
 
       const pos = starGeo.attributes.position.array as Float32Array;
       const speed = warpSpeedRef.current;
@@ -216,10 +215,10 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
           clearInterval(interval);
           return 100;
         }
-        const next = prev + Math.floor(Math.random() * 12) + 7;
+        const next = prev + Math.floor(Math.random() * 14) + 8;
         return Math.min(next, 100);
       });
-    }, 55);
+    }, 50);
 
     return () => clearInterval(interval);
   }, []);
@@ -239,7 +238,7 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
   const isReady = progress >= 100;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden select-none bg-[#09090e] flex items-center justify-center font-sans">
+    <div className="fixed inset-0 z-50 overflow-hidden select-none bg-[#07080d] flex items-center justify-center font-sans">
       
       {/* 3D Three.js WebGL Canvas Layer */}
       <div 
@@ -248,203 +247,130 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
         aria-hidden="true"
       />
 
-      {/* Subtle Halftone Dot Matrix Pattern in Top Corner */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:16px_16px] opacity-25 pointer-events-none z-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#09090e]/40 to-[#09090e] pointer-events-none z-0" />
+      {/* Subtle Halftone Dot Matrix Pattern */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-[radial-gradient(#84cc16_1px,transparent_1px)] [background-size:20px_20px] opacity-20 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#07080d]/40 to-[#07080d] pointer-events-none z-0" />
 
       {/* Opening Light Burst Overlay */}
-      <div className={`absolute inset-0 bg-gradient-to-tr from-purple-800 via-lilac-500 to-amber-300 pointer-events-none z-30 transition-opacity duration-700 ${
+      <div className={`absolute inset-0 bg-gradient-to-tr from-lime-600 via-emerald-500 to-cyan-400 pointer-events-none z-30 transition-opacity duration-700 ${
         isOpeningAnimation ? 'opacity-90' : 'opacity-0'
       }`} />
 
       {/* Left & Right Shutter Panels for Cinematic Door Reveal */}
       <div 
-        className={`absolute inset-y-0 left-0 w-1/2 bg-[#09090e] z-20 transition-transform duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
-          isOpeningAnimation ? '-translate-x-full shadow-[30px_0_60px_rgba(192,132,252,0.9)]' : 'translate-x-0'
+        className={`absolute inset-y-0 left-0 w-1/2 bg-[#07080d] z-20 transition-transform duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+          isOpeningAnimation ? '-translate-x-full shadow-[30px_0_60px_rgba(132,204,22,0.8)]' : 'translate-x-0'
         }`}
       />
       <div 
-        className={`absolute inset-y-0 right-0 w-1/2 bg-[#09090e] z-20 transition-transform duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
-          isOpeningAnimation ? 'translate-x-full shadow-[-30px_0_60px_rgba(192,132,252,0.9)]' : 'translate-x-0'
+        className={`absolute inset-y-0 right-0 w-1/2 bg-[#07080d] z-20 transition-transform duration-1000 cubic-bezier(0.16, 1, 0.3, 1) ${
+          isOpeningAnimation ? 'translate-x-full shadow-[-30px_0_60px_rgba(132,204,22,0.8)]' : 'translate-x-0'
         }`}
       />
 
-      {/* =========================================================================
-          MAIN TEMPLATE CANVAS CONTAINER
-      ========================================================================= */}
-      <div className={`relative z-40 max-w-4xl w-full h-full mx-auto px-6 py-8 flex flex-col items-center justify-between text-center transition-all duration-800 cubic-bezier(0.16, 1, 0.3, 1) ${
+      {/* MAIN CONTAINER */}
+      <div className={`relative z-40 max-w-5xl w-full h-full mx-auto px-4 sm:px-6 py-6 flex flex-col items-center justify-between text-center transition-all duration-800 cubic-bezier(0.16, 1, 0.3, 1) ${
         isOpeningAnimation 
           ? 'scale-125 opacity-0 blur-sm pointer-events-none' 
           : 'scale-100 opacity-100 blur-0'
       }`}>
         
-        {/* 1. TOP FLOATING PILL NAVIGATION BAR */}
-        <div className="w-full flex items-center justify-between pt-2">
-          
+        {/* TOP FLOATING PILL NAVIGATION BAR */}
+        <div className="w-full flex items-center justify-between pt-1">
           <div className="opacity-0 w-10 hidden sm:block" />
 
-          {/* Floating Pill Menu matching template */}
-          <div className="mx-auto inline-flex items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-2xl shadow-2xl">
-            <span className="px-4 py-1.5 rounded-full bg-white text-black font-semibold text-xs tracking-wide shadow-md">
-              Home
+          {/* Floating Pill Menu */}
+          <div className="mx-auto inline-flex items-center gap-1 sm:gap-2 px-3 py-1.5 rounded-full bg-black/60 border border-white/10 backdrop-blur-2xl shadow-2xl">
+            <span className="px-3.5 py-1 rounded-full bg-white text-dark-950 font-semibold text-xs tracking-wide shadow-md">
+              Entry Portal
             </span>
-            <span className="px-3 sm:px-4 py-1.5 text-zinc-400 hover:text-white text-xs font-medium transition-colors cursor-pointer" onClick={() => handleOpenPortfolio()}>
-              About me
+            <span 
+              className="px-3 py-1 text-dark-300 hover:text-white text-xs font-mono transition-colors cursor-pointer"
+              onClick={handleOpenPortfolio}
+            >
+              Explore Portfolio
             </span>
-            <span className="px-3 sm:px-4 py-1.5 text-zinc-400 hover:text-white text-xs font-medium transition-colors cursor-pointer" onClick={() => handleOpenPortfolio()}>
-              Why me
-            </span>
-            <span className="px-3 sm:px-4 py-1.5 text-zinc-400 hover:text-white text-xs font-medium transition-colors cursor-pointer" onClick={() => handleOpenPortfolio()}>
-              Projects
-            </span>
-            <span className="px-3 sm:px-4 py-1.5 text-zinc-400 hover:text-white text-xs font-medium transition-colors cursor-pointer" onClick={() => handleOpenPortfolio()}>
-              Contact
+            <span 
+              className="px-3 py-1 text-dark-300 hover:text-white text-xs font-mono transition-colors cursor-pointer hidden sm:inline"
+              onClick={handleOpenPortfolio}
+            >
+              AI Systems
             </span>
           </div>
 
           {/* Sound Toggle */}
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-2.5 rounded-full bg-black/60 border border-white/10 text-zinc-400 hover:text-white transition-all hover:scale-105 backdrop-blur-md"
+            className="p-2.5 rounded-full bg-black/60 border border-white/10 text-dark-300 hover:text-white transition-all hover:scale-105 backdrop-blur-md cursor-pointer"
             title={soundEnabled ? "Mute Audio" : "Enable Audio"}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4 text-lilac-300" /> : <VolumeX className="w-4 h-4" />}
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-lime-400" /> : <VolumeX className="w-4 h-4" />}
           </button>
         </div>
 
-        {/* 2. CENTER HERO: HEADLINE & 3D FROSTED FOLDER */}
-        <div className="my-auto py-4 flex flex-col items-center w-full max-w-2xl">
+        {/* CENTER HERO: ENTRY IMAGE ARTWORK */}
+        <div className="my-auto py-2 flex flex-col items-center w-full max-w-4xl">
           
-          {/* Headline Text matching template */}
-          <div className="space-y-1 mb-6 text-center">
-            <p className="text-zinc-400 text-sm sm:text-base tracking-wide font-medium">
-              Explore my
-            </p>
-            <h2 className="text-zinc-300 text-lg sm:text-2xl font-medium tracking-wide">
-              Artificial Intelligence &amp; Machine Learning
-            </h2>
-            
-            {/* Monumental 'Portfolio' with Floating 3D Gold Medal Ribbon */}
-            <div className="relative inline-block mt-1">
-              <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-200 to-zinc-500 drop-shadow-2xl">
-                Portfolio
-              </h1>
-
-              {/* 3D Gold Medal Badge with Star on the letter 'o' */}
-              <div className="absolute -top-1 sm:-top-2 -right-4 sm:-right-8 w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center animate-bounce-slow">
-                <div className="relative flex items-center justify-center">
-                  {/* Glowing Medal Body */}
-                  <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr from-amber-600 via-amber-300 to-yellow-100 p-0.5 shadow-[0_0_20px_rgba(251,191,36,0.6)] border border-amber-200 flex items-center justify-center">
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-inner">
-                      <span className="text-white text-xs sm:text-base font-black">★</span>
-                    </div>
-                  </div>
-                  {/* Hanging Gold Ribbons */}
-                  <div className="absolute -bottom-2 flex gap-1">
-                    <div className="w-2 h-3 bg-amber-600 rotate-12 rounded-b-sm" />
-                    <div className="w-2 h-3 bg-amber-600 -rotate-12 rounded-b-sm" />
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Top subtle badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-dark-900/90 border border-lime-500/30 text-lime-300 text-[11px] font-mono tracking-wider mb-3 backdrop-blur-md shadow-lg">
+            <Sparkles className="w-3 h-3 text-lime-400" />
+            <span>NITHIN SAI VALLURI // AI PRODUCT BUILDER</span>
           </div>
 
-          {/* 3. CENTER 3D FROSTED GLASS FOLDER WITH SLIDING DOCUMENTS */}
+          {/* Cinematic Interactive Entry Image Frame */}
           <div 
-            className="relative w-72 sm:w-96 aspect-[4/3] my-2 cursor-pointer group select-none"
-            onMouseEnter={() => setIsHoveredFolder(true)}
-            onMouseLeave={() => setIsHoveredFolder(false)}
+            className="relative w-full max-w-3xl aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer group select-none shadow-2xl border border-white/15 bg-black/80 transition-all duration-500 hover:border-lime-400/60 hover:shadow-[0_0_40px_rgba(132,204,22,0.35)]"
+            onMouseEnter={() => setIsHoveredImage(true)}
+            onMouseLeave={() => setIsHoveredImage(false)}
             onClick={handleOpenPortfolio}
           >
-            {/* Folder Back Tab */}
-            <div className="absolute inset-x-4 -top-3 h-8 bg-zinc-800/80 rounded-t-2xl border-t border-l border-r border-white/20" />
+            {/* Ambient Backlight Glow */}
+            <div className="absolute inset-0 bg-gradient-to-t from-lime-500/10 via-transparent to-transparent pointer-events-none z-10" />
 
-            {/* Folder Back Body */}
-            <div className="absolute inset-0 rounded-3xl bg-zinc-900/90 border border-white/15 shadow-2xl overflow-hidden" />
+            {/* The Entry Image */}
+            <img
+              src="/images/entry-cover.png"
+              alt="Portfolio Entry Cover - Create a collection of works for portfolio"
+              className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
+                isHoveredImage ? 'scale-[1.03]' : 'scale-100'
+              }`}
+            />
 
-            {/* 3 Sliding Document Sheets Inside Folder */}
-            <div className={`absolute inset-x-8 top-3 h-4/5 flex justify-center transition-transform duration-500 ${
-              isHoveredFolder ? '-translate-y-8 scale-105' : 'translate-y-0 scale-100'
+            {/* Hover Prompt Cue Overlay */}
+            <div className={`absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 flex flex-col items-center justify-center gap-3 z-20 ${
+              isHoveredImage ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}>
-              
-              {/* Document Sheet 3 (Back) */}
-              <div className="absolute w-56 sm:w-64 h-36 sm:h-44 bg-zinc-300 rounded-xl shadow-lg transform -rotate-3 translate-y-1 p-3 flex flex-col justify-between opacity-70">
-                <div className="space-y-1.5">
-                  <div className="w-16 h-2 rounded bg-zinc-500" />
-                  <div className="w-36 h-1.5 rounded bg-zinc-400" />
-                  <div className="w-28 h-1.5 rounded bg-zinc-400" />
-                </div>
+              <div className="px-5 py-2.5 rounded-full bg-white text-dark-950 font-bold text-xs uppercase tracking-widest shadow-2xl flex items-center gap-2 transform scale-95 group-hover:scale-100 transition-transform">
+                <Zap className="w-4 h-4 text-lime-600 fill-lime-600" />
+                <span>CLICK TO ENTER &amp; EXPLORE</span>
+                <ArrowRight className="w-4 h-4" />
               </div>
-
-              {/* Document Sheet 2 (Middle) */}
-              <div className="absolute w-56 sm:w-64 h-36 sm:h-44 bg-zinc-200 rounded-xl shadow-lg transform rotate-2 translate-y-2 p-3.5 flex flex-col justify-between opacity-85">
-                <div className="space-y-1.5">
-                  <div className="w-20 h-2 rounded bg-purple-600/60" />
-                  <div className="w-40 h-1.5 rounded bg-zinc-400" />
-                  <div className="w-32 h-1.5 rounded bg-zinc-400" />
-                </div>
-              </div>
-
-              {/* Document Sheet 1 (Front) */}
-              <div className="absolute w-56 sm:w-64 h-36 sm:h-44 bg-white rounded-xl shadow-xl transform rotate-0 translate-y-3 p-4 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-purple-700 uppercase">
-                      AI &amp; ML Projects
-                    </span>
-                    <FileCode className="w-3.5 h-3.5 text-zinc-400" />
-                  </div>
-                  <div className="w-full h-1.5 rounded bg-zinc-200" />
-                  <div className="w-4/5 h-1.5 rounded bg-zinc-200" />
-                  <div className="w-3/5 h-1.5 rounded bg-zinc-200" />
-                </div>
-                <div className="text-[9px] font-mono text-zinc-500 flex items-center justify-between">
-                  <span>Python • RAG • Models</span>
-                  <span className="text-purple-600 font-bold">100%</span>
-                </div>
-              </div>
-
+              <span className="text-[11px] font-mono text-lime-300 bg-black/70 px-3 py-1 rounded-full border border-lime-500/30">
+                Audio Chime + Warp Animation Enabled
+              </span>
             </div>
 
-            {/* Folder Front Translucent Frosted Glass Cover */}
-            <div className="absolute inset-0 rounded-3xl bg-zinc-800/40 backdrop-blur-xl border border-white/25 shadow-2xl p-6 flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-zinc-800/30">
-              
-              {/* Glowing High-Tech Center Emblem matching template */}
-              <div className="flex flex-col items-center justify-center space-y-1 my-auto">
-                <div className="w-14 h-14 rounded-2xl bg-black/50 border border-white/20 flex items-center justify-center shadow-inner group-hover:scale-110 group-hover:border-amber-400/60 transition-all duration-300">
-                  <BrainCircuit className="w-8 h-8 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-                </div>
-                <span className="text-xs font-cinzel font-black tracking-widest text-white uppercase mt-1">
-                  VN AI &amp; ML
-                </span>
-                <span className="text-[9px] font-mono text-zinc-400 tracking-wider">
-                  INTELLIGENT SYSTEMS
-                </span>
-              </div>
-
-              {/* Floating Angled Gold Badge / Sticker on the right of the folder */}
-              <div className="absolute -top-3 -right-3 sm:-right-4 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold text-[11px] font-mono tracking-tight shadow-xl rotate-6 border border-yellow-200 flex flex-col items-start leading-tight animate-pulse">
-                <span className="text-xs font-black">2024-2028</span>
-                <span className="text-[9px] font-semibold">B.Tech AI &amp; ML</span>
-              </div>
-
-            </div>
+            {/* Subtle corner tech markers */}
+            <div className="absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-lime-400 z-10 pointer-events-none" />
+            <div className="absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-lime-400 z-10 pointer-events-none" />
+            <div className="absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-lime-400 z-10 pointer-events-none" />
+            <div className="absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-lime-400 z-10 pointer-events-none" />
           </div>
 
-          {/* 4. INTEGRATED LOADING BAR & ENTER ACTION BUTTON */}
-          <div className="w-full max-w-sm mt-4">
+          {/* INTEGRATED LOADING BAR & ENTER ACTION BUTTON */}
+          <div className="w-full max-w-md mt-5">
             {!isReady ? (
               <div className="w-full rounded-2xl bg-black/70 border border-white/15 p-3.5 shadow-2xl backdrop-blur-md">
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
-                  <span className="flex items-center gap-2 text-zinc-300">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
-                    INITIALIZING AI &amp; ML CORE...
+                <div className="flex items-center justify-between text-xs font-mono text-dark-300 mb-2">
+                  <span className="flex items-center gap-2 text-dark-200">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-lime-400" />
+                    INITIALIZING AI CORE &amp; ASSETS...
                   </span>
-                  <span className="font-bold text-amber-400">{progress}%</span>
+                  <span className="font-bold text-lime-400">{progress}%</span>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+                <div className="w-full h-1.5 rounded-full bg-dark-800 overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-purple-500 via-lilac-400 to-amber-400 transition-all duration-150"
+                    className="h-full bg-gradient-to-r from-lime-500 via-emerald-400 to-cyan-400 transition-all duration-150"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -452,20 +378,21 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
             ) : (
               <button
                 onClick={handleOpenPortfolio}
-                className="w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-2xl bg-white hover:bg-zinc-200 text-black font-cinzel font-black text-xs sm:text-sm uppercase tracking-widest shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group border border-white/40"
+                className="w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-white via-zinc-100 to-white hover:bg-zinc-200 text-dark-950 font-bold text-xs sm:text-sm uppercase tracking-widest shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 group border border-white/40 cursor-pointer"
               >
-                <Zap className="w-4 h-4 text-black animate-bounce" />
+                <Zap className="w-4 h-4 text-lime-600 fill-lime-600 animate-pulse" />
                 <span>OPEN &amp; EXPLORE PORTFOLIO</span>
-                <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-dark-950 group-hover:translate-x-1.5 transition-transform" />
               </button>
             )}
           </div>
 
         </div>
 
-        {/* 5. BOTTOM MINIMALIST FOOTER STRIP */}
-        <div className="w-full flex items-center justify-between text-xs font-medium text-zinc-500 tracking-wider pt-2">
+        {/* BOTTOM MINIMALIST FOOTER STRIP */}
+        <div className="w-full flex items-center justify-between text-xs font-mono text-dark-500 tracking-wider pt-1">
           <span>{personalInfo.name}</span>
+          <span className="text-lime-400/80">AI/ML ENGINEER &amp; PRODUCT BUILDER</span>
           <span>2026</span>
         </div>
 
@@ -473,3 +400,5 @@ export const EntrancePortal: React.FC<EntrancePortalProps> = ({ onEnter }) => {
     </div>
   );
 };
+
+export default EntrancePortal;
