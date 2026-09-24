@@ -7,13 +7,14 @@ import { Section3DWrapper } from './components/Section3DWrapper';
 import { SlideNavigator } from './components/SlideNavigator';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { WhatIDo } from './components/WhatIDo';
-import { Projects } from './components/Projects';
-import { BentoGridSection } from './components/BentoGridSection';
-import { Certificates } from './components/Certificates';
 import { About } from './components/About';
 import { Experience } from './components/Experience';
-import { Achievements } from './components/Achievements';
+import { Skills } from './components/Skills';
+import { Projects } from './components/Projects';
+import { AILab } from './components/AILab';
+import { Approach } from './components/Approach';
+import { Education } from './components/Education';
+import { Certificates } from './components/Certificates';
 import { ResumeSection } from './components/ResumeSection';
 import { ResumeModal } from './components/ResumeModal';
 import { Contact } from './components/Contact';
@@ -31,7 +32,7 @@ export const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen relative selection:bg-red-500/30 selection:text-red-200 overflow-x-hidden">
+      <div className="min-h-screen relative selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden bg-dark-950 text-dark-100">
         
         {/* Top Laser Scroll Progress Indicator */}
         <ScrollProgressBar />
@@ -47,7 +48,7 @@ export const App: React.FC = () => {
         {/* Sticky Accessible Navigation Bar */}
         <Navbar />
 
-        {/* Floating 3D Slide Navigator */}
+        {/* Floating Slide Navigator */}
         <SlideNavigator />
 
         {/* Main Content Sections with Ultra-Smooth 3D Scroll Reveal Animation */}
@@ -63,28 +64,32 @@ export const App: React.FC = () => {
             <About />
           </Section3DWrapper>
 
+          <Section3DWrapper id="experience">
+            <Experience />
+          </Section3DWrapper>
+
           <Section3DWrapper id="skills">
-            <WhatIDo />
+            <Skills />
           </Section3DWrapper>
 
           <Section3DWrapper id="projects">
             <Projects onToast={showToast} />
           </Section3DWrapper>
 
-          <Section3DWrapper id="toolkit-process">
-            <BentoGridSection />
+          <Section3DWrapper id="ailab">
+            <AILab />
+          </Section3DWrapper>
+
+          <Section3DWrapper id="approach">
+            <Approach />
+          </Section3DWrapper>
+
+          <Section3DWrapper id="education">
+            <Education />
           </Section3DWrapper>
 
           <Section3DWrapper id="certificates">
             <Certificates onToast={showToast} />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="experience">
-            <Experience />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="achievements">
-            <Achievements />
           </Section3DWrapper>
 
           <Section3DWrapper id="resume">
@@ -99,7 +104,7 @@ export const App: React.FC = () => {
           </Section3DWrapper>
         </main>
 
-        {/* Global Footer */}
+        {/* Global Developer Footer */}
         <Footer />
 
         {/* Interactive Resume Lightbox Modal */}

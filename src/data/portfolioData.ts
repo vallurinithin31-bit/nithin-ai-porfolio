@@ -630,3 +630,5 @@ export const certificationsData: Certificate[] = [
     isPlaceholder: false
   }
 ];
+
+export const certificatesData = certificationsData;

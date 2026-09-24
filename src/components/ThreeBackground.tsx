@@ -30,17 +30,17 @@ export const ThreeBackground: React.FC = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // --- Crimson & Obsidian Palette ---
+    // --- Electric Cyan, Indigo & Violet Palette ---
     const themeColors = [
-      new THREE.Color('#ef4444'), // Crimson Red
-      new THREE.Color('#dc2626'), // Deep Red
-      new THREE.Color('#f87171'), // Light Coral
-      new THREE.Color('#ffffff'), // Sparkle White
-      new THREE.Color('#fda4af')  // Rose Accent
+      new THREE.Color('#38bdf8'), // Electric Cyan
+      new THREE.Color('#6366f1'), // Indigo
+      new THREE.Color('#a855f7'), // Electric Purple
+      new THREE.Color('#818cf8'), // Periwinkle
+      new THREE.Color('#06b6d4')  // Cyan
     ];
 
     // --- 1. 3D Neural Nodes ---
-    const particleCount = window.innerWidth < 768 ? 90 : 160;
+    const particleCount = window.innerWidth < 768 ? 80 : 150;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -61,9 +61,9 @@ export const ThreeBackground: React.FC = () => {
       colors[i * 3 + 2] = randomColor.b;
 
       velocities.push({
-        x: (Math.random() - 0.5) * 0.05,
-        y: (Math.random() - 0.5) * 0.05,
-        z: (Math.random() - 0.5) * 0.03
+        x: (Math.random() - 0.5) * 0.04,
+        y: (Math.random() - 0.5) * 0.04,
+        z: (Math.random() - 0.5) * 0.025
       });
     }
 
@@ -79,8 +79,8 @@ export const ThreeBackground: React.FC = () => {
       if (ctx) {
         const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
         gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(0.3, 'rgba(248, 113, 113, 0.9)');
-        gradient.addColorStop(0.65, 'rgba(220, 38, 38, 0.4)');
+        gradient.addColorStop(0.3, 'rgba(56, 189, 248, 0.9)');
+        gradient.addColorStop(0.65, 'rgba(99, 102, 241, 0.4)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 64, 64);
@@ -89,7 +89,7 @@ export const ThreeBackground: React.FC = () => {
     };
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: 4.2,
+      size: 4.0,
       map: createCircleTexture(),
       transparent: true,
       opacity: 0.85,
@@ -101,7 +101,7 @@ export const ThreeBackground: React.FC = () => {
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
-    // --- 2. Dynamic 3D Crimson Neural Synapses ---
+    // --- 2. Dynamic 3D Neural Synapses ---
     const maxConnections = particleCount * 5;
     const linePositions = new Float32Array(maxConnections * 6);
     const lineColors = new Float32Array(maxConnections * 6);
@@ -124,22 +124,22 @@ export const ThreeBackground: React.FC = () => {
     // --- 3. 3D Floating Geometric AI Crystals ---
     const geomGroup = new THREE.Group();
 
-    // Geometric Cluster 1: Icosahedron in Crimson Wireframe
+    // Geometric Cluster 1: Icosahedron in Indigo Wireframe
     const icoGeo = new THREE.IcosahedronGeometry(7, 1);
     const icoMat = new THREE.MeshBasicMaterial({
-      color: 0xef4444,
+      color: 0x6366f1,
       wireframe: true,
       transparent: true,
-      opacity: 0.25
+      opacity: 0.22
     });
     const icosahedron = new THREE.Mesh(icoGeo, icoMat);
     icosahedron.position.set(38, 15, -20);
     geomGroup.add(icosahedron);
 
-    // Geometric Cluster 2: Torus Ring in Deep Red
+    // Geometric Cluster 2: Torus Ring in Cyan
     const torusGeo = new THREE.TorusGeometry(12, 0.35, 16, 64);
     const torusMat = new THREE.MeshBasicMaterial({
-      color: 0xdc2626,
+      color: 0x38bdf8,
       wireframe: true,
       transparent: true,
       opacity: 0.20
@@ -149,10 +149,10 @@ export const ThreeBackground: React.FC = () => {
     torus.rotation.x = Math.PI / 3;
     geomGroup.add(torus);
 
-    // Geometric Cluster 3: Octahedron in Coral/White
+    // Geometric Cluster 3: Octahedron in Violet
     const octGeo = new THREE.OctahedronGeometry(5, 0);
     const octMat = new THREE.MeshBasicMaterial({
-      color: 0xf87171,
+      color: 0xa855f7,
       wireframe: true,
       transparent: true,
       opacity: 0.22
@@ -171,10 +171,10 @@ export const ThreeBackground: React.FC = () => {
 
     const surfaceGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight, widthSegments, heightSegments);
     const surfaceMaterial = new THREE.MeshBasicMaterial({
-      color: 0xdc2626,
+      color: 0x6366f1,
       wireframe: true,
       transparent: true,
-      opacity: 0.12
+      opacity: 0.10
     });
 
     const waveSurface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);
@@ -280,10 +280,10 @@ export const ThreeBackground: React.FC = () => {
             linePositions[lineIndex++] = posArray[j * 3 + 1];
             linePositions[lineIndex++] = posArray[j * 3 + 2];
 
-            // Royal violet line colors
-            const r = 0.75 * alpha;
-            const g = 0.52 * alpha;
-            const b = 0.98 * alpha;
+            // Electric cyan/indigo line colors
+            const r = 0.22 * alpha;
+            const g = 0.74 * alpha;
+            const b = 0.97 * alpha;
 
             lineColors[colorIndex++] = r;
             lineColors[colorIndex++] = g;
@@ -349,3 +349,5 @@ export const ThreeBackground: React.FC = () => {
     />
   );
 };
+
+export default ThreeBackground;
