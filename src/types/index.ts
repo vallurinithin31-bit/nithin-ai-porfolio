@@ -1,63 +1,118 @@
 export interface PersonalInfo {
   name: string;
-  title: string;
-  educationStatus: string;
-  intro: string;
+  primaryPositioning: string;
+  shortIntro: string;
+  heroHeadline: string;
+  heroStatement: string;
+  heroSupporting: string;
+  heroParagraph: string;
+  aboutHeading: string;
   aboutText: string;
-  profileImage: string;
-  profileImageFallback: string;
-  resumeUrl: string;
+  educationDegree: string;
+  location: string;
+  resumePath: string;
   resumeFileName: string;
-  phone?: string;
   socials: {
     linkedin: string;
     github: string;
     email: string;
-    instagram?: string;
-    location?: string;
     phone?: string;
+    location: string;
     driveCertificates?: string;
   };
 }
 
-export interface Education {
-  degree: string;
-  specialization: string;
-  status: string;
-  institution?: string;
-  year?: string;
-  previousEducation?: {
-    level: string;
-    institution: string;
-    details?: string;
+export interface AboutHighlight {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  iconName: string;
+  tag: string;
+}
+
+export interface ExperienceData {
+  company: string;
+  companyAlt?: string;
+  role: string;
+  duration: string;
+  location: string;
+  description: string;
+  responsibilities: string[];
+  metricCards: {
+    title: string;
+    highlight: string;
+    description: string;
+    icon: string;
+  }[];
+  priorExperience?: {
+    id: string;
+    role: string;
+    organization: string;
+    duration: string;
+    description: string;
+    responsibilities: string[];
   }[];
 }
 
+export interface SkillItem {
+  name: string;
+  explanation: string;
+  tag?: string;
+}
+
 export interface SkillCategory {
+  id: string;
   title: string;
-  iconName: string;
   description: string;
-  skills: {
-    name: string;
-    status: 'proficient' | 'learning';
-    icon?: string;
-  }[];
+  iconName: string;
+  skills: SkillItem[];
 }
 
 export interface Project {
   id: string;
   title: string;
-  category: 'Agentic AI' | 'AI / Healthcare' | 'Machine Learning' | 'Data Analysis' | 'Full-Stack Web' | 'All';
+  subtitle?: string;
+  category: 'Voice AI' | 'AI Agents' | 'Automation' | 'Analytics' | 'Workflow AI' | 'All';
   shortDescription: string;
-  problemStatement: string;
+  problem: string;
+  solution: string;
   features: string[];
+  contribution: string;
+  outcome: string;
   technologies: string[];
-  disclaimer?: string;
   image: string;
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   badge?: string;
-  featured?: boolean;
+  disclaimer?: string;
+  note?: string;
+}
+
+export interface AILabItem {
+  id: string;
+  title: string;
+  description: string;
+  tech: string[];
+  status: string;
+  iconName: string;
+}
+
+export interface ApproachStep {
+  step: string;
+  stage: string;
+  title: string;
+  description: string;
+  actionPoints: string[];
+}
+
+export interface EducationData {
+  degree: string;
+  specialization: string;
+  status: string;
+  institution?: string;
+  year: string;
+  coursework: string[];
 }
 
 export interface Certificate {
@@ -65,8 +120,8 @@ export interface Certificate {
   title: string;
   issuer: string;
   date: string;
-  category: 'Artificial Intelligence' | 'Machine Learning' | 'Data Science' | 'Internships' | 'Competitions & Hackathons' | 'Professional Skills' | 'Web Development' | 'Python' | 'Generative AI' | 'Workshops' | 'Courses' | 'Other' | string;
-  image: string;
+  category: string;
+  image?: string;
   credentialId?: string;
   credentialUrl?: string;
   downloadUrl?: string;
@@ -75,26 +130,11 @@ export interface Certificate {
   isPlaceholder?: boolean;
 }
 
-export interface ExperienceItem {
+export interface HeroNode {
   id: string;
-  role: string;
-  organization: string;
-  duration: string;
-  type: 'Self-Directed' | 'Internship' | 'Academic' | 'Upcoming';
-  description?: string;
-  focus: string[];
-  responsibilities?: string[];
-  achievements?: string[];
-  isPlaceholder?: boolean;
+  label: string;
+  description: string;
+  category: string;
+  color: string;
 }
 
-export interface AchievementItem {
-  id: string;
-  title: string;
-  category: 'Hackathon' | 'Workshop' | 'Course' | 'AI/ML Milestone' | 'Certification' | 'Other';
-  date: string;
-  description: string;
-  tags: string[];
-  link?: string;
-  isPlaceholder?: boolean;
-}
