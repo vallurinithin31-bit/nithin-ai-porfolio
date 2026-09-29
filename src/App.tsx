@@ -58,7 +58,7 @@ export const App: React.FC = () => {
         </Section3DWrapper>
 
         <Section3DWrapper id="about">
-          <About />
+          <About onToast={showToast} />
         </Section3DWrapper>
 
         <Section3DWrapper id="whatibuild">
