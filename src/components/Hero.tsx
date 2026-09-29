@@ -1,177 +1,229 @@
-import React from 'react';
-import { 
-  Download, 
-  ArrowRight, 
-  Mail
-} from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
-import { LinkedinIcon, GithubIcon } from './Icons';
-import { HeroInteractiveNodes } from './HeroInteractiveNodes';
+import React, { useEffect, useRef } from 'react';
+import { motion, Variants } from 'framer-motion';
 
 interface HeroProps {
-  onOpenResumeModal: () => void;
-  onToast: (msg: string, type?: 'success' | 'info' | 'error') => void;
+  onOpenResumeModal?: () => void;
+  onToast?: (msg: string, type?: 'success' | 'info' | 'error') => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal, onToast }) => {
-  const handleDownloadResume = () => {
-    onOpenResumeModal();
-    onToast("Opening Executive Digital Resume viewer...", "info");
+const HEADLINE_LINES = [
+  'AI/ML DEVELOPER',
+  'BUILDING INTELLIGENT',
+  'DIGITAL EXPERIENCES.',
+];
+
+export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Subtle particle network background
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const particles: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: Math.random() * 1.2 + 0.4,
+      });
+    }
+
+    let raf: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (d < 120) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(99,102,241,${0.05 * (1 - d / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.stroke();
+          }
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(99,102,241,0.25)';
+        ctx.fill();
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  const container: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
+  };
+
+  const lineVariant: Variants = {
+    hidden: { y: 80, opacity: 0, skewY: 3 },
+    show: { y: 0, opacity: 1, skewY: 0, transition: { duration: 0.85, ease: 'easeOut' } },
   };
 
   return (
-    <section 
-      id="home" 
-      className="relative min-h-[92vh] flex flex-col justify-center pt-24 sm:pt-28 pb-12 sm:pb-16 overflow-hidden select-none"
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16"
     >
-      {/* Pinned Left Vertical Social Media Rail on Desktop */}
-      <div className="fixed left-4 sm:left-6 top-1/2 -translate-y-1/2 z-30 hidden xl:flex flex-col items-center gap-3 text-dark-300">
-        <a
-          href={personalInfo.socials.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub Profile"
-          className="p-2.5 rounded-xl bg-dark-900/80 hover:bg-white hover:text-dark-950 border border-dark-700/80 backdrop-blur-md transition-all hover:scale-110 shadow-lg text-dark-200"
+      {/* Canvas background */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
+
+      {/* Ambient glow */}
+      <div
+        className="absolute top-1/3 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none opacity-[0.07]"
+        style={{ background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)', transform: 'translate(-50%,-50%)' }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 w-full">
+        {/* Section tag */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="font-mono text-[11px] text-zinc-600 tracking-[0.3em] uppercase mb-8 flex items-center gap-3"
         >
-          <GithubIcon className="w-4 h-4" />
-        </a>
+          <span className="w-6 h-[1px] bg-zinc-700" />
+          HI THERE, I'M
+        </motion.div>
 
-        <a
-          href={personalInfo.socials.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn Profile"
-          className="p-2.5 rounded-xl bg-dark-900/80 hover:bg-[#0A66C2] hover:text-white border border-dark-700/80 backdrop-blur-md transition-all hover:scale-110 shadow-lg text-dark-200"
+        {/* Name */}
+        <div className="overflow-hidden mb-3">
+          <motion.h1
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.9, ease: 'easeOut', delay: 0.2 }}
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-[108px] font-black text-white tracking-tight leading-none"
+          >
+            NITHIN SAI.
+          </motion.h1>
+        </div>
+
+        {/* Headline lines */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="mb-8 overflow-hidden"
         >
-          <LinkedinIcon className="w-4 h-4" />
-        </a>
-
-        <a
-          href={`mailto:${personalInfo.socials.email}`}
-          aria-label="Direct Email Transmission"
-          className="p-2.5 rounded-xl bg-dark-900/80 hover:bg-cyan-500 hover:text-dark-950 border border-dark-700/80 backdrop-blur-md transition-all hover:scale-110 shadow-lg text-dark-200"
-        >
-          <Mail className="w-4 h-4" />
-        </a>
-
-        <div className="w-[1px] h-12 bg-gradient-to-b from-dark-700 to-transparent mt-1" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-          
-          {/* Left Column: Brand Identity, Headline, Pitch & Action Buttons */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left space-y-5">
-            
-            {/* Top Sub-Brand Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-dark-900/90 border border-indigo-500/30 text-indigo-300 text-xs font-mono tracking-wider backdrop-blur-md shadow-lg">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              <span>AI / ML • PRODUCT • AUTOMATION</span>
-            </div>
-
-            {/* Main Headline & Positioning */}
-            <div className="space-y-2">
-              <h1 className="text-3xl sm:text-5xl lg:text-[3.25rem] font-black tracking-tight text-white leading-[1.15] font-display">
-                Building Intelligent Products <span className="text-gradient-electric">With AI.</span>
-              </h1>
-              
-              <p className="text-lg sm:text-xl font-medium text-dark-200 tracking-tight leading-relaxed">
-                {personalInfo.heroStatement}
-              </p>
-            </div>
-
-            {/* Supporting Narrative Paragraph */}
-            <p className="text-sm sm:text-base text-dark-300 max-w-xl leading-relaxed font-normal">
-              {personalInfo.heroParagraph}
-            </p>
-
-            {/* 3 Call-to-Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
-              <a
-                href="#projects"
-                className="btn-electric-primary w-full sm:w-auto text-center"
-              >
-                <span>View My Work</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-
-              <button
-                onClick={handleDownloadResume}
-                className="btn-electric-secondary w-full sm:w-auto flex items-center justify-center gap-2"
-              >
-                <Download className="w-4 h-4 text-cyan-400" />
-                <span>Download Resume</span>
-              </button>
-
-              <a
-                href="#contact"
-                className="btn-electric-secondary w-full sm:w-auto flex items-center justify-center gap-2 text-dark-200 hover:text-white"
-              >
-                <span>Let's Connect</span>
-                <span className="text-cyan-400">→</span>
-              </a>
-            </div>
-
-            {/* Quick Metrics / Key Focus Chips */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-4 w-full max-w-lg">
-              <div className="p-2.5 rounded-xl bg-dark-900/60 border border-dark-800 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-dark-400 block uppercase tracking-wider">Focus</span>
-                <span className="text-xs font-semibold text-white">LLM Apps & Agents</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-dark-900/60 border border-dark-800 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-dark-400 block uppercase tracking-wider">Applied Stack</span>
-                <span className="text-xs font-semibold text-cyan-300">Python • SQL • RAG</span>
-              </div>
-              <div className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-dark-900/60 border border-dark-800 backdrop-blur-sm">
-                <span className="text-[10px] font-mono text-dark-400 block uppercase tracking-wider">Status</span>
-                <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Building Active
+          {HEADLINE_LINES.map((line, i) => (
+            <div key={i} className="overflow-hidden">
+              <motion.div variants={lineVariant}>
+                <span
+                  className={`block text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight ${
+                    i === HEADLINE_LINES.length - 1
+                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400'
+                      : 'text-zinc-300'
+                  }`}
+                >
+                  {line}
                 </span>
-              </div>
+              </motion.div>
             </div>
+          ))}
+        </motion.div>
 
-            {/* Mobile / Tablet Social Strip */}
-            <div className="flex xl:hidden items-center gap-3 pt-2">
-              <span className="text-xs text-dark-400 font-mono">Socials:</span>
-              <a 
-                href={personalInfo.socials.github} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="p-2 rounded-lg bg-dark-800 text-dark-200 hover:text-white border border-dark-700"
-                aria-label="GitHub Profile"
-              >
-                <GithubIcon className="w-3.5 h-3.5" />
-              </a>
-              <a 
-                href={personalInfo.socials.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="p-2 rounded-lg bg-dark-800 text-dark-200 hover:text-white border border-dark-700"
-                aria-label="LinkedIn Profile"
-              >
-                <LinkedinIcon className="w-3.5 h-3.5" />
-              </a>
-              <a 
-                href={`mailto:${personalInfo.socials.email}`} 
-                className="p-2 rounded-lg bg-dark-800 text-dark-200 hover:text-white border border-dark-700"
-                aria-label="Email"
-              >
-                <Mail className="w-3.5 h-3.5" />
-              </a>
-            </div>
+        {/* Description */}
+        <motion.p
+          initial={{ y: 24, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8, ease: 'easeOut' }}
+          className="max-w-xl text-zinc-500 text-base md:text-lg leading-relaxed mb-10"
+        >
+          I build AI-powered applications, automation workflows and intelligent systems
+          that turn ideas into practical solutions.
+        </motion.p>
 
-          </div>
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ y: 24, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.0, ease: 'easeOut' }}
+          className="flex flex-wrap gap-4 mb-12"
+        >
+          <a
+            href="#projects"
+            onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }); }}
+            data-cursor="button"
+            className="group flex items-center gap-2 bg-white text-black font-bold text-sm px-7 py-3.5 rounded-full hover:bg-zinc-100 transition-all duration-300 tracking-wide"
+          >
+            VIEW MY WORK
+            <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">↗</span>
+          </a>
+          <a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+            data-cursor="button"
+            className="group flex items-center gap-2 border border-white/20 text-white font-semibold text-sm px-7 py-3.5 rounded-full hover:border-white/50 hover:bg-white/5 transition-all duration-300 tracking-wide"
+          >
+            LET'S CONNECT
+            <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">↗</span>
+          </a>
+          {onOpenResumeModal && (
+            <button
+              onClick={onOpenResumeModal}
+              data-cursor="button"
+              className="group flex items-center gap-2 text-zinc-500 hover:text-zinc-300 font-medium text-sm transition-colors duration-200 tracking-wide"
+            >
+              VIEW RESUME ↗
+            </button>
+          )}
+        </motion.div>
 
-          {/* Right Column: High-Tech Interactive AI Core & Technology Constellation Visual */}
-          <div className="lg:col-span-5 flex items-center justify-center">
-            <HeroInteractiveNodes />
-          </div>
+        {/* Status + Scroll */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.2, ease: 'easeOut' }}
+            className="flex items-center gap-2.5"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-zinc-500 text-[11px] tracking-[0.2em] uppercase font-mono">
+              Open to AI/ML Internships & Opportunities
+            </span>
+          </motion.div>
 
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.3, ease: 'easeOut' }}
+            className="font-mono text-[11px] text-zinc-700 tracking-[0.2em] uppercase animate-bounce"
+          >
+            SCROLL TO EXPLORE ↓
+          </motion.div>
         </div>
       </div>
     </section>
   );
 };
-
-export default Hero;

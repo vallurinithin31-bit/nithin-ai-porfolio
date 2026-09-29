@@ -1,159 +1,146 @@
 import React from 'react';
-import { 
-  User, 
-  Cpu, 
-  Boxes, 
-  Zap, 
-  GraduationCap, 
-  CheckCircle2,
-  BrainCircuit
-} from 'lucide-react';
-import { personalInfo, aboutHighlights, educationData } from '../data/portfolioData';
-import { InstagramGlassCard } from './InstagramGlassCard';
+import { motion, useInView, Variants } from 'framer-motion';
+import { useRef } from 'react';
+
+const TECH_PILLS = ['Python', 'AI/ML', 'LLMs', 'RAG', 'AI Agents', 'Automation'];
 
 export const About: React.FC = () => {
-  const currentFocus = [
-    'Generative AI & LLM Systems',
-    'AI Agents & Autonomous Loops',
-    'Intelligent Workflow Automation',
-    'Prompt Engineering & Structured Output',
-    'Product Analytics & Funnel EDA',
-    'AI-Assisted Software Development'
-  ];
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.2 });
 
-  const getIcon = (name: string) => {
-    switch (name) {
-      case 'BrainCircuit':
-        return <BrainCircuit className="w-5 h-5 text-indigo-400" />;
-      case 'Boxes':
-        return <Boxes className="w-5 h-5 text-cyan-400" />;
-      case 'Zap':
-        return <Zap className="w-5 h-5 text-purple-400" />;
-      default:
-        return <Cpu className="w-5 h-5 text-cyan-400" />;
-    }
-  };
+  const fadeUp = (delay: number): Variants => ({
+    hidden: { opacity: 0, y: 32 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: 'easeOut' } },
+  });
 
   return (
-    <section id="about" className="py-20 sm:py-24 bg-dark-950 relative select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        
-        {/* Section Header */}
-        <div className="flex flex-col items-start mb-12 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-dark-900 border border-indigo-500/30 text-indigo-300 text-xs font-mono tracking-widest uppercase mb-3">
-            <User className="w-3.5 h-3.5 text-cyan-400" />
-            <span>ABOUT NITHIN SAI VALLURI</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight font-display">
-            {personalInfo.aboutHeading}
-          </h2>
-          <p className="text-sm sm:text-base text-dark-300 max-w-2xl mt-3 leading-relaxed">
-            Positioned at the intersection of AI engineering, product thinking, automation, and analytics to transform complex concepts into practical, reliable software.
-          </p>
+    <section id="about" className="py-24 md:py-36 px-6 md:px-10 max-w-7xl mx-auto">
+      <div ref={ref}>
+        {/* Section tag */}
+        <motion.div
+          variants={fadeUp(0)}
+          initial="hidden"
+          animate={inView ? 'show' : 'hidden'}
+          className="font-mono text-[11px] text-zinc-600 tracking-[0.3em] uppercase mb-6 flex items-center gap-3"
+        >
+          <span className="w-6 h-[1px] bg-zinc-700" />
+          [ABOUT]
+        </motion.div>
+
+        {/* Heading */}
+        <div className="overflow-hidden mb-16">
+          <motion.h2
+            variants={fadeUp(0.1)}
+            initial="hidden"
+            animate={inView ? 'show' : 'hidden'}
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-none"
+          >
+            A LITTLE BIT
+            <br />
+            <span className="text-zinc-600">ABOUT ME.</span>
+          </motion.h2>
         </div>
 
-        {/* 3 Prominent Pillar Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 mb-12">
-          {aboutHighlights.map((highlight) => (
-            <div
-              key={highlight.id}
-              className="glass-panel p-6 sm:p-7 rounded-3xl group hover:border-indigo-500/50 hover:bg-dark-850/80 transition-all duration-300 relative overflow-hidden"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+          {/* Text content */}
+          <div className="space-y-6">
+            <motion.p
+              variants={fadeUp(0.2)}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              className="text-zinc-300 text-lg leading-relaxed"
             >
-              {/* Subtle background glow */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/15 transition-all" />
+              I'm Valluri Nithin Sai, a Computer Science Engineering student specializing in{' '}
+              <span className="text-white font-semibold">Artificial Intelligence and Machine Learning</span>. I enjoy
+              building AI-powered applications, experimenting with LLMs, automation, data-driven systems and
+              intelligent user experiences.
+            </motion.p>
+            <motion.p
+              variants={fadeUp(0.3)}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              className="text-zinc-500 text-base leading-relaxed"
+            >
+              My focus is on <span className="text-zinc-300">learning by building</span> — transforming ideas into
+              working prototypes and practical products using Python, AI tools, APIs, automation and modern
+              development workflows. I'm particularly drawn to Generative AI, LLM applications, AI agents and
+              prompt engineering.
+            </motion.p>
 
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-2xl bg-dark-800 border border-dark-700 group-hover:scale-110 transition-transform">
-                  {getIcon(highlight.iconName)}
+            {/* Info chips */}
+            <motion.div
+              variants={fadeUp(0.4)}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              className="grid grid-cols-2 gap-3 pt-4"
+            >
+              {[
+                { label: 'EDUCATION', value: 'B.Tech CSE (AI & ML)' },
+                { label: 'LOCATION', value: 'Andhra Pradesh, India' },
+                { label: 'FOCUS', value: 'AI / ML / Generative AI' },
+                { label: 'STATUS', value: 'Open to Internships' },
+              ].map(({ label, value }) => (
+                <div key={label} className="border border-white/[0.06] rounded-xl p-4 bg-white/[0.02]">
+                  <p className="text-[10px] tracking-widest text-zinc-600 uppercase font-mono mb-1">{label}</p>
+                  <p className="text-sm text-zinc-300 font-medium">{value}</p>
                 </div>
-                <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-wider px-2.5 py-1 rounded-full bg-dark-900 border border-dark-700">
-                  {highlight.tag}
-                </span>
-              </div>
-
-              <h3 className="text-base sm:text-lg font-bold text-white tracking-tight font-display mb-1 group-hover:text-cyan-300 transition-colors">
-                {highlight.title}
-              </h3>
-              
-              <div className="text-xs font-mono text-indigo-300 mb-3">
-                {highlight.subtitle}
-              </div>
-
-              <p className="text-xs sm:text-sm text-dark-300 leading-relaxed font-sans">
-                {highlight.description}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Narrative & Profile Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          
-          {/* Left Column: Narrative Bio & Focus Areas */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
-              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight font-display flex items-center gap-2.5">
-                <BrainCircuit className="w-5 h-5 text-cyan-400" />
-                <span>How I Build &amp; Solve Problems</span>
-              </h3>
-
-              <div className="space-y-4 text-xs sm:text-sm text-dark-200 leading-relaxed">
-                <p>
-                  I am a Computer Science Engineering student specializing in <strong className="text-white">Artificial Intelligence &amp; Machine Learning</strong>. Rather than treating code as just syntax, I approach engineering from a product and systems mindset — deconstructing the root friction, prototyping with cutting-edge AI architectures, and turning ideas into reliable experiences.
-                </p>
-                <p>
-                  My applied work covers large language models, prompt engineering pipelines, agentic workflows, SQL database querying, and automated background tasks. I thrive on fast iterative experimentation and turning ambiguity into structured, useful software.
-                </p>
-              </div>
-
-              {/* Current Focus List */}
-              <div className="pt-4 border-t border-dark-800 space-y-3">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-400 block">
-                  Current Technical Focus:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {currentFocus.map((point, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-dark-200">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
-                      <span>{point}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Education Banner */}
-              <div className="pt-5 border-t border-dark-800 flex items-start gap-3.5">
-                <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 shrink-0">
-                  <GraduationCap className="w-5 h-5" />
-                </div>
-                <div className="space-y-1">
-                  <div className="text-[11px] font-mono text-cyan-400 uppercase tracking-wider">
-                    {educationData.status}
-                  </div>
-                  <h4 className="text-sm font-bold text-white">
-                    {educationData.degree}
-                  </h4>
-                  <p className="text-xs text-dark-400">
-                    {educationData.institution} • {educationData.year}
-                  </p>
-                </div>
-              </div>
-
-            </div>
+              ))}
+            </motion.div>
           </div>
 
-          {/* Right Column: Holographic Glass Instagram & Identity Card */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="w-full">
-              <InstagramGlassCard />
-            </div>
+          {/* Profile card + tech pills */}
+          <div className="flex flex-col items-center gap-8">
+            {/* Profile card */}
+            <motion.div
+              variants={fadeUp(0.25)}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              className="group relative w-64 h-72 rounded-2xl border border-white/10 overflow-hidden bg-zinc-900/60 cursor-pointer"
+              data-cursor="image"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            >
+              {/* Placeholder avatar */}
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-indigo-950/60 to-black">
+                <span className="text-7xl font-black text-white/10 select-none">VS</span>
+              </div>
+              {/* Ambient glow */}
+              <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent" />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <p className="text-white text-sm font-bold tracking-[0.25em] uppercase text-center">
+                  AI • BUILD
+                  <br />
+                  LEARN • INNOVATE
+                </p>
+              </div>
+              {/* Corner accent */}
+              <div className="absolute top-4 left-4 w-6 h-6 border-l-2 border-t-2 border-indigo-500/50 rounded-tl" />
+              <div className="absolute bottom-4 right-4 w-6 h-6 border-r-2 border-b-2 border-indigo-500/50 rounded-br" />
+            </motion.div>
+
+            {/* Floating tech pills */}
+            <motion.div
+              variants={fadeUp(0.4)}
+              initial="hidden"
+              animate={inView ? 'show' : 'hidden'}
+              className="flex flex-wrap justify-center gap-2"
+            >
+              {TECH_PILLS.map((pill, i) => (
+                <motion.span
+                  key={pill}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                  transition={{ delay: 0.5 + i * 0.07, duration: 0.4 }}
+                  className="px-4 py-2 rounded-full border border-indigo-500/25 text-indigo-300 text-xs font-mono tracking-wide bg-indigo-500/5 hover:bg-indigo-500/15 hover:border-indigo-500/50 transition-all duration-200"
+                >
+                  {pill}
+                </motion.span>
+              ))}
+            </motion.div>
           </div>
-
         </div>
-
       </div>
     </section>
   );
 };
-
-export default About;

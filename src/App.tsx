@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import { ThemeProvider } from './context/ThemeContext';
 import { BackgroundGlow } from './components/BackgroundGlow';
 import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { EntrancePortal } from './components/EntrancePortal';
 import { Section3DWrapper } from './components/Section3DWrapper';
-import { SlideNavigator } from './components/SlideNavigator';
 import { Navbar } from './components/Navbar';
+import { CustomCursor } from './components/CustomCursor';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
-import { Experience } from './components/Experience';
-import { Skills } from './components/Skills';
+import { WhatIBuild } from './components/WhatIBuild';
+import { Stats } from './components/Stats';
 import { Projects } from './components/Projects';
-import { AILab } from './components/AILab';
-import { Approach } from './components/Approach';
-import { Education } from './components/Education';
-import { Certificates } from './components/Certificates';
-import { ResumeSection } from './components/ResumeSection';
+import { TechStack } from './components/TechStack';
+import { Timeline } from './components/Timeline';
+import { Certifications } from './components/Certifications';
+import { Experience } from './components/Experience';
+import { ResumeCTA } from './components/ResumeCTA';
 import { ResumeModal } from './components/ResumeModal';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
@@ -31,99 +30,94 @@ export const App: React.FC = () => {
   };
 
   return (
-    <ThemeProvider>
-      <div className="min-h-screen relative selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden bg-dark-950 text-dark-100">
-        
-        {/* Top Laser Scroll Progress Indicator */}
-        <ScrollProgressBar />
+    <div className="min-h-screen relative overflow-x-hidden bg-[#07080d] text-zinc-100 selection:bg-indigo-500/30 selection:text-indigo-200">
+      {/* Custom cursor (desktop only) */}
+      <CustomCursor />
 
-        {/* Welcoming AI & ML Entrance Gate with Hyperdrive Opening Animation */}
-        {!hasEntered && (
-          <EntrancePortal onEnter={() => setHasEntered(true)} />
-        )}
+      {/* Top scroll progress bar */}
+      <ScrollProgressBar />
 
-        {/* Ambient AI Background Glow & 3D Neural Mesh */}
-        <BackgroundGlow />
+      {/* Entrance loading screen */}
+      {!hasEntered && (
+        <EntrancePortal onEnter={() => setHasEntered(true)} />
+      )}
 
-        {/* Sticky Accessible Navigation Bar */}
-        <Navbar />
+      {/* Ambient background particles */}
+      <BackgroundGlow />
 
-        {/* Floating Slide Navigator */}
-        <SlideNavigator />
+      {/* Navigation */}
+      <Navbar />
 
-        {/* Main Content Sections with Ultra-Smooth 3D Scroll Reveal Animation */}
-        <main className="relative z-10 space-y-12 sm:space-y-16">
-          <Section3DWrapper id="home">
-            <Hero
-              onOpenResumeModal={() => setIsResumeModalOpen(true)}
-              onToast={showToast}
-            />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="about">
-            <About />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="experience">
-            <Experience />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="skills">
-            <Skills />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="projects">
-            <Projects onToast={showToast} />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="ailab">
-            <AILab />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="approach">
-            <Approach />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="education">
-            <Education />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="certificates">
-            <Certificates onToast={showToast} />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="resume">
-            <ResumeSection
-              onOpenModal={() => setIsResumeModalOpen(true)}
-              onToast={showToast}
-            />
-          </Section3DWrapper>
-
-          <Section3DWrapper id="contact">
-            <Contact onToast={showToast} />
-          </Section3DWrapper>
-        </main>
-
-        {/* Global Developer Footer */}
-        <Footer />
-
-        {/* Interactive Resume Lightbox Modal */}
-        <ResumeModal
-          isOpen={isResumeModalOpen}
-          onClose={() => setIsResumeModalOpen(false)}
-          onToast={showToast}
-        />
-
-        {/* Global Toast Notification */}
-        {toast && (
-          <Toast
-            message={toast.message}
-            type={toast.type}
-            onClose={() => setToast(null)}
+      {/* Main content */}
+      <main className="relative z-10">
+        <Section3DWrapper id="home">
+          <Hero
+            onOpenResumeModal={() => setIsResumeModalOpen(true)}
+            onToast={showToast}
           />
-        )}
-      </div>
-    </ThemeProvider>
+        </Section3DWrapper>
+
+        <Section3DWrapper id="about">
+          <About />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="whatibuild">
+          <WhatIBuild />
+        </Section3DWrapper>
+
+        <Stats />
+
+        <Section3DWrapper id="projects">
+          <Projects onToast={showToast} />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="skills">
+          <TechStack />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="journey">
+          <Timeline />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="certificates">
+          <Certifications onToast={showToast} />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="experience">
+          <Experience />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="resume">
+          <ResumeCTA
+            onOpenModal={() => setIsResumeModalOpen(true)}
+            onToast={showToast}
+          />
+        </Section3DWrapper>
+
+        <Section3DWrapper id="contact">
+          <Contact onToast={showToast} />
+        </Section3DWrapper>
+      </main>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Resume modal */}
+      <ResumeModal
+        isOpen={isResumeModalOpen}
+        onClose={() => setIsResumeModalOpen(false)}
+        onToast={showToast}
+      />
+
+      {/* Toast notifications */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+    </div>
   );
 };
 

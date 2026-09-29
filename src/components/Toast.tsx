@@ -1,48 +1,50 @@
 import React, { useEffect } from 'react';
-import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle, Info, AlertCircle, X } from 'lucide-react';
 
-export interface ToastProps {
+interface ToastProps {
   message: string;
-  type?: 'success' | 'error' | 'info';
+  type?: 'success' | 'info' | 'error';
   onClose: () => void;
   duration?: number;
 }
 
-export const Toast: React.FC<ToastProps> = ({ message, type = 'success', onClose, duration = 4000 }) => {
+export const Toast: React.FC<ToastProps> = ({
+  message,
+  type = 'success',
+  onClose,
+  duration = 4000,
+}) => {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
-    }, duration);
-    return () => clearTimeout(timer);
-  }, [onClose, duration]);
+    const t = setTimeout(onClose, duration);
+    return () => clearTimeout(t);
+  }, [duration, onClose]);
 
-  const icons = {
-    success: <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />,
-    error: <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />,
-    info: <Info className="w-5 h-5 text-cyan-400 shrink-0" />
-  };
+  const config = {
+    success: { icon: CheckCircle, color: 'text-emerald-400', border: 'border-emerald-500/30' },
+    info: { icon: Info, color: 'text-sky-400', border: 'border-sky-500/30' },
+    error: { icon: AlertCircle, color: 'text-red-400', border: 'border-red-500/30' },
+  }[type];
 
-  const borderColors = {
-    success: 'border-emerald-500/30 bg-slate-900/95 text-emerald-200',
-    error: 'border-rose-500/30 bg-slate-900/95 text-rose-200',
-    info: 'border-cyan-500/30 bg-slate-900/95 text-cyan-200'
-  };
+  const Icon = config.icon;
 
   return (
-    <div
-      role="alert"
-      aria-live="assertive"
-      className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border shadow-2xl backdrop-blur-md animate-bounce-short transition-all ${borderColors[type]}`}
-    >
-      {icons[type]}
-      <p className="text-sm font-medium text-slate-100">{message}</p>
-      <button
-        onClick={onClose}
-        className="ml-2 text-slate-400 hover:text-white transition-colors"
-        aria-label="Close notification"
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+        className={`fixed bottom-6 right-6 z-[9999] flex items-center gap-3 px-5 py-4 rounded-xl border ${config.border} bg-zinc-950/95 backdrop-blur-xl shadow-2xl max-w-sm`}
       >
-        <X className="w-4 h-4" />
-      </button>
-    </div>
+        <Icon size={16} className={config.color} />
+        <p className="text-sm text-zinc-200 font-medium">{message}</p>
+        <button
+          onClick={onClose}
+          className="ml-2 text-zinc-600 hover:text-zinc-300 transition-colors"
+        >
+          <X size={14} />
+        </button>
+      </motion.div>
+    </AnimatePresence>
   );
 };

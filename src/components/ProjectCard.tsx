@@ -1,17 +1,7 @@
-import React from 'react';
-import { 
-  Bot, 
-  Mic, 
-  Laptop, 
-  Cpu, 
-  Database, 
-  CheckCircle2, 
-  Sparkles,
-  Maximize2
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 import { Project } from '../types';
-import { GithubIcon } from './Icons';
-import { TiltCard3D } from './TiltCard3D';
 
 interface ProjectCardProps {
   project: Project;
@@ -20,142 +10,119 @@ interface ProjectCardProps {
   onToast?: (msg: string, type?: 'success' | 'info' | 'error') => void;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ 
-  project, 
-  index, 
-  onOpenDetails
-}) => {
-  const formattedIndex = index < 10 ? `0${index}` : `${index}`;
+const categoryAccent: Record<string, string> = {
+  'Voice AI': 'text-cyan-400 border-cyan-400/30 bg-cyan-400/10',
+  'AI Agents': 'text-indigo-400 border-indigo-400/30 bg-indigo-400/10',
+  'Automation': 'text-violet-400 border-violet-400/30 bg-violet-400/10',
+  'Workflow AI': 'text-purple-400 border-purple-400/30 bg-purple-400/10',
+  'Analytics': 'text-sky-400 border-sky-400/30 bg-sky-400/10',
+};
 
-  const getProjectIcon = (category: string) => {
-    switch (category) {
-      case 'Voice AI':
-        return <Mic className="w-5 h-5 text-cyan-400" />;
-      case 'AI Agents':
-        return <Bot className="w-5 h-5 text-indigo-400" />;
-      case 'Automation':
-        return <Laptop className="w-5 h-5 text-purple-400" />;
-      case 'Workflow AI':
-        return <Cpu className="w-5 h-5 text-cyan-400" />;
-      case 'Analytics':
-        return <Database className="w-5 h-5 text-indigo-400" />;
-      default:
-        return <Sparkles className="w-5 h-5 text-cyan-400" />;
-    }
-  };
+const categoryGlow: Record<string, string> = {
+  'Voice AI': 'rgba(56,189,248,0.12)',
+  'AI Agents': 'rgba(99,102,241,0.12)',
+  'Automation': 'rgba(139,92,246,0.12)',
+  'Workflow AI': 'rgba(168,85,247,0.12)',
+  'Analytics': 'rgba(14,165,233,0.12)',
+};
+
+export const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+  index,
+  onOpenDetails,
+}) => {
+  const [hovered, setHovered] = useState(false);
+  const formattedIndex = index < 10 ? `0${index}` : `${index}`;
+  const accent = categoryAccent[project.category] ?? 'text-indigo-400 border-indigo-400/30 bg-indigo-400/10';
+  const glow = categoryGlow[project.category] ?? 'rgba(99,102,241,0.12)';
 
   return (
-    <TiltCard3D className="h-full">
-      <div className="glass-panel rounded-3xl overflow-hidden group transition-all duration-300 flex flex-col justify-between h-full border border-dark-700/80 hover:border-cyan-400/50 hover:shadow-electric-md">
-        
-        {/* Top Header Card Frame */}
-        <div>
-          <div className="relative p-5 sm:p-6 bg-gradient-to-b from-indigo-950/40 via-dark-900 to-dark-900/90 border-b border-dark-800">
-            {/* Ambient Corner Glow */}
-            <div className="absolute -right-6 -top-6 w-28 h-28 bg-indigo-500/15 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500 pointer-events-none" />
+    <motion.div
+      data-cursor="project"
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      onClick={() => onOpenDetails(project)}
+      className="relative flex flex-col cursor-pointer group rounded-2xl border border-zinc-800 bg-[#0b0c14] overflow-hidden select-none"
+      style={{
+        boxShadow: hovered
+          ? `0 0 0 1.5px #6366f1, 0 8px 40px ${glow}, 0 2px 8px rgba(0,0,0,0.6)`
+          : '0 2px 12px rgba(0,0,0,0.4)',
+        transform: hovered ? 'translateY(-8px)' : 'translateY(0px)',
+        transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s cubic-bezier(0.22,1,0.36,1)',
+      }}
+    >
+      {/* Ambient top-right glow */}
+      <div
+        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(circle, ${glow} 0%, transparent 70%)`,
+          opacity: hovered ? 1 : 0.4,
+        }}
+      />
 
-            <div className="flex items-center justify-between mb-3 z-10 relative">
-              <span className="px-2.5 py-1 rounded-lg bg-dark-950 border border-dark-700 text-xs font-mono font-bold text-cyan-300 shadow">
-                {formattedIndex}
-              </span>
-
-              <span className="px-3 py-0.5 rounded-full text-[10px] font-mono font-semibold border border-indigo-500/30 bg-indigo-500/15 text-indigo-300">
-                {project.badge || project.category}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3.5 z-10 relative">
-              <div className="w-11 h-11 rounded-2xl bg-dark-800 border border-dark-700 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:border-cyan-400 transition-all shadow-md">
-                {getProjectIcon(project.category)}
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors font-display tracking-tight truncate">
-                  {project.title}
-                </h3>
-                <p className="text-[11px] font-mono text-dark-400 truncate">
-                  {project.subtitle || project.category}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Body Information */}
-          <div className="p-5 sm:p-6 space-y-4">
-            <p className="text-xs text-dark-200 leading-relaxed font-sans line-clamp-2">
-              {project.shortDescription}
-            </p>
-
-            {/* Problem Box */}
-            <div className="p-3 rounded-2xl bg-dark-950 border border-dark-800 text-xs space-y-1">
-              <div className="text-[10px] font-mono font-bold text-indigo-400 uppercase tracking-wider">
-                Problem Addressed:
-              </div>
-              <p className="text-dark-300 text-[11px] leading-relaxed line-clamp-2">
-                {project.problem}
-              </p>
-            </div>
-
-            {/* Solution Highlights */}
-            <div className="space-y-1.5">
-              <div className="text-[10px] font-mono font-bold text-dark-400 uppercase tracking-wider">
-                Core Highlights:
-              </div>
-              <ul className="space-y-1">
-                {project.features.slice(0, 2).map((feat, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[11px] text-dark-200">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                    <span className="line-clamp-1">{feat}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Tech Stack Chips */}
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {project.technologies.slice(0, 4).map((tech, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-0.5 rounded-lg text-[10px] font-mono bg-dark-800 border border-dark-700 text-dark-200 group-hover:border-indigo-500/40 transition-colors"
-                >
-                  {tech}
-                </span>
-              ))}
-              {project.technologies.length > 4 && (
-                <span className="px-2 py-0.5 rounded-lg text-[10px] font-mono bg-dark-800 text-dark-400">
-                  +{project.technologies.length - 4}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Action Bottom Bar */}
-        <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-dark-800 mt-2">
-          {project.githubUrl ? (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-dark-300 hover:text-white transition-colors"
-            >
-              <GithubIcon className="w-4 h-4 text-cyan-400" />
-              <span>Source</span>
-            </a>
-          ) : (
-            <span className="text-xs font-mono text-dark-400">Personal System</span>
-          )}
-
-          <button
-            onClick={() => onOpenDetails(project)}
-            className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-indigo-600/20 to-cyan-600/20 hover:from-indigo-600 hover:to-cyan-600 text-cyan-300 hover:text-white border border-indigo-500/30 text-xs font-mono transition-all hover:scale-105 cursor-pointer shadow-sm"
-          >
-            <span>Explore Details</span>
-            <Maximize2 className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
+      {/* Top Row — Category tag + Project number */}
+      <div className="flex items-start justify-between px-6 pt-6 pb-0 relative z-10">
+        <span
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-mono font-semibold tracking-widest uppercase border ${accent}`}
+        >
+          {project.badge ?? project.category}
+        </span>
+        <span className="text-5xl font-black text-zinc-800/60 font-display leading-none select-none">
+          {formattedIndex}
+        </span>
       </div>
-    </TiltCard3D>
+
+      {/* Title */}
+      <div className="px-6 pt-4 pb-0 relative z-10">
+        <h3
+          className="text-lg sm:text-xl font-bold text-white font-display tracking-tight leading-snug group-hover:text-indigo-200 transition-colors duration-300"
+        >
+          {project.title}
+        </h3>
+      </div>
+
+      {/* Description */}
+      <div className="px-6 pt-3 pb-0 relative z-10 flex-1">
+        <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3 font-sans">
+          {project.shortDescription}
+        </p>
+      </div>
+
+      {/* Tech pills */}
+      <div className="px-6 pt-4 pb-0 relative z-10 flex flex-wrap gap-1.5">
+        {project.technologies.slice(0, 5).map((tech, idx) => (
+          <span
+            key={idx}
+            className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-900 border border-zinc-700/60 text-zinc-400 group-hover:border-indigo-500/40 group-hover:text-zinc-300 transition-colors duration-300"
+          >
+            {tech}
+          </span>
+        ))}
+        {project.technologies.length > 5 && (
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 border border-zinc-800 text-zinc-500">
+            +{project.technologies.length - 5}
+          </span>
+        )}
+      </div>
+
+      {/* Bottom bar */}
+      <div className="px-6 pt-5 pb-5 mt-5 flex items-center justify-between relative z-10 border-t border-zinc-800/60">
+        <span className="text-[11px] font-mono text-zinc-600 uppercase tracking-widest">
+          VIEW DETAILS
+        </span>
+        <motion.div
+          animate={{ rotate: hovered ? 45 : 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center group-hover:border-indigo-500 group-hover:bg-indigo-500/10 transition-colors duration-300"
+        >
+          <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-indigo-400 transition-colors duration-300" />
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
 

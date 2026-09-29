@@ -1,178 +1,131 @@
 import React from 'react';
-import { 
-  Briefcase, 
-  Calendar, 
-  Building2, 
-  CheckCircle2, 
-  Cpu,
-  LineChart,
-  Zap,
-  Database,
-  Layers,
-  Sparkles
-} from 'lucide-react';
-import { experienceData } from '../data/portfolioData';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+
+const EXPERIENCES = [
+  {
+    num: '01',
+    role: 'AI / Product / Growth Intern',
+    company: 'Screen Pitch AI (Screen Andragogy Platforms)',
+    duration: 'Present',
+    location: 'Remote',
+    description: 'Working at the intersection of AI, content technology, product workflows and growth analytics.',
+    responsibilities: [
+      'AI-assisted product development and rapid prototype engineering',
+      'AI workflow experimentation and prompt engineering optimization',
+      'AI content, storytelling and visual concept generation workflows',
+      'Product and user insight analysis to understand prospect behavior',
+      'Conversion analysis and outreach campaign pattern discovery',
+      'Data preparation and analysis using Python and SQL',
+      'Translating business requirements into AI-powered solutions',
+    ],
+    tags: ['AI', 'Product', 'Python', 'Analytics', 'Prompt Engineering'],
+    isCurrent: true,
+  },
+  {
+    num: '02',
+    role: 'Web Development Intern',
+    company: 'CodeAlpha',
+    duration: 'Completed',
+    location: 'Remote',
+    description: 'Hands-on full-stack development building web applications using Python, Django and JavaScript.',
+    responsibilities: [
+      'Built responsive frontends and integrated secure REST APIs',
+      'Implemented relational database schemas using MySQL and SQLite',
+      'Managed version control and code collaboration via Git/GitHub',
+    ],
+    tags: ['Python', 'Django', 'JavaScript', 'SQL', 'Git'],
+    isCurrent: false,
+  },
+];
 
 export const Experience: React.FC = () => {
-  const getMetricIcon = (icon: string) => {
-    switch (icon) {
-      case 'Cpu':
-        return <Cpu className="w-5 h-5 text-indigo-400" />;
-      case 'LineChart':
-        return <LineChart className="w-5 h-5 text-cyan-400" />;
-      case 'Zap':
-        return <Zap className="w-5 h-5 text-purple-400" />;
-      case 'Database':
-        return <Database className="w-5 h-5 text-cyan-400" />;
-      default:
-        return <Sparkles className="w-5 h-5 text-indigo-400" />;
-    }
-  };
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
-    <section id="experience" className="py-20 sm:py-24 bg-dark-950/60 relative select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        
-        {/* Section Header */}
-        <div className="flex flex-col items-start mb-12 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-dark-900 border border-indigo-500/30 text-indigo-300 text-xs font-mono tracking-widest uppercase mb-3">
-            <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
-            <span>EXPERIENCE &amp; APPLIED WORK</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight font-display">
-            Real-World Impact &amp; AI Workflows
-          </h2>
-          <p className="text-sm sm:text-base text-dark-300 max-w-2xl mt-3 leading-relaxed">
-            Applying generative AI, prompt engineering, agentic concepts, and product analytics in real operational environments.
-          </p>
-        </div>
+    <section id="experience" className="py-24 md:py-36 px-6 md:px-10 max-w-7xl mx-auto">
+      <div ref={ref}>
+        {/* Tag */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          className="font-mono text-[11px] text-zinc-600 tracking-[0.3em] uppercase mb-6 flex items-center gap-3"
+        >
+          <span className="w-6 h-[1px] bg-zinc-700" />
+          [EXPERIENCE]
+        </motion.div>
 
-        {/* 4 Metric-Style Impact Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-10">
-          {experienceData.metricCards.map((card, idx) => (
-            <div
-              key={idx}
-              className="glass-panel p-5 sm:p-6 rounded-3xl group hover:border-cyan-400/40 hover:bg-dark-850/80 transition-all duration-300 relative overflow-hidden"
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: 32 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-none mb-16"
+        >
+          EXPERI
+          <span className="text-zinc-600">ENCE.</span>
+        </motion.h2>
+
+        {/* Experience items */}
+        <div className="space-y-6">
+          {EXPERIENCES.map((exp, i) => (
+            <motion.div
+              key={exp.num}
+              initial={{ opacity: 0, y: 32 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className={`border border-white/[0.06] rounded-2xl p-8 md:p-10 bg-white/[0.01] hover:border-indigo-500/20 transition-all duration-300 ${
+                exp.isCurrent ? 'border-indigo-500/15' : ''
+              }`}
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="p-2.5 rounded-xl bg-dark-800 border border-dark-700">
-                  {getMetricIcon(card.icon)}
+              <div className="flex flex-col md:flex-row md:items-start gap-8">
+                {/* Left: number + meta */}
+                <div className="md:w-56 shrink-0">
+                  <span className="text-5xl font-black text-zinc-800 block mb-4">{exp.num}</span>
+                  <div className="space-y-1">
+                    {exp.isCurrent && (
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-500 tracking-widest uppercase">Active</span>
+                      </div>
+                    )}
+                    <p className="text-[10px] font-mono text-zinc-600 tracking-wide">{exp.duration}</p>
+                    <p className="text-[10px] font-mono text-zinc-700">{exp.location}</p>
+                  </div>
                 </div>
-                <span className="text-[10px] font-mono text-cyan-300 uppercase px-2 py-0.5 rounded-full bg-dark-900 border border-dark-700">
-                  Core Area
-                </span>
-              </div>
 
-              <div className="text-sm font-bold text-white font-display mb-1 group-hover:text-cyan-300 transition-colors">
-                {card.title}
+                {/* Right: details */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl md:text-2xl font-black text-white tracking-tight mb-1">{exp.role}</h3>
+                  <p className="text-indigo-400 text-sm font-semibold mb-3">{exp.company}</p>
+                  <p className="text-zinc-500 text-sm leading-relaxed mb-5">{exp.description}</p>
+
+                  <ul className="space-y-2 mb-6">
+                    {exp.responsibilities.map((r) => (
+                      <li key={r} className="flex items-start gap-2.5 text-sm text-zinc-500">
+                        <span className="text-indigo-600 mt-0.5 shrink-0">→</span>
+                        {r}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="flex flex-wrap gap-2">
+                    {exp.tags.map((tag) => (
+                      <span key={tag} className="px-3 py-1 text-[10px] font-mono border border-white/[0.06] text-zinc-600 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="text-xs font-mono text-indigo-300 font-semibold mb-2">
-                {card.highlight}
-              </div>
-              <p className="text-[11px] sm:text-xs text-dark-300 leading-relaxed font-sans">
-                {card.description}
-              </p>
-            </div>
+            </motion.div>
           ))}
         </div>
-
-        {/* Primary Role Card */}
-        <div className="glass-panel p-6 sm:p-9 rounded-3xl mb-8 relative overflow-hidden">
-          {/* Subtle Ambient Backlight */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-
-          {/* Header Info */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-6 border-b border-dark-800">
-            <div className="flex items-center gap-4">
-              <div className="p-3.5 rounded-2xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                <Cpu className="w-6 h-6 text-cyan-400 animate-pulse" />
-              </div>
-              <div>
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight font-display">
-                    {experienceData.role}
-                  </h3>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 text-[10px] font-mono border border-emerald-500/25 uppercase tracking-wider flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                    Active Role
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm font-mono text-dark-300 flex items-center gap-1.5 mt-1">
-                  <Building2 className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>{experienceData.company}</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-dark-900/90 text-dark-200 text-xs font-mono border border-dark-700">
-                <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-                <span>{experienceData.duration}</span>
-              </div>
-              <div className="px-3 py-1.5 rounded-full bg-dark-900/90 text-dark-300 text-xs font-mono border border-dark-700">
-                {experienceData.location}
-              </div>
-            </div>
-          </div>
-
-          {/* Summary */}
-          <p className="text-xs sm:text-sm text-dark-200 leading-relaxed mb-6 font-normal">
-            {experienceData.description}
-          </p>
-
-          {/* 9 Responsibilities Grid */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-400 mb-4 font-mono flex items-center gap-2">
-              <Layers className="w-4 h-4 text-cyan-400" />
-              <span>Key Responsibilities &amp; Deliverables:</span>
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {experienceData.responsibilities.map((r, i) => (
-                <div 
-                  key={i} 
-                  className="flex items-start gap-2.5 p-3 rounded-2xl bg-dark-900/60 border border-dark-800 text-xs text-dark-200 hover:border-dark-700 transition-colors"
-                >
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
-                  <span className="leading-relaxed">{r}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Prior Experience Subsection */}
-        {experienceData.priorExperience && experienceData.priorExperience.length > 0 && (
-          <div className="space-y-4">
-            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-dark-400">
-              Prior Experience
-            </h4>
-            {experienceData.priorExperience.map((prior) => (
-              <div
-                key={prior.id}
-                className="glass-panel p-5 sm:p-6 rounded-3xl border border-dark-800 flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-2.5">
-                    <h5 className="text-sm font-bold text-white font-display">
-                      {prior.role}
-                    </h5>
-                    <span className="text-xs font-mono text-dark-400">@ {prior.organization}</span>
-                  </div>
-                  <p className="text-xs text-dark-300 max-w-2xl">
-                    {prior.description}
-                  </p>
-                </div>
-                <div className="text-xs font-mono text-dark-400 px-3 py-1 rounded-full bg-dark-900 border border-dark-800 self-start md:self-auto">
-                  {prior.duration}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
       </div>
     </section>
   );
 };
-
-export default Experience;
